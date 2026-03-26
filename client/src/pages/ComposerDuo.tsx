@@ -97,83 +97,83 @@ export default function ComposerDuo() {
   ];
 
   const handleAddPopularCombo = (combo: DuoCombo) => {
-    addToCart({
-      id: `duo-${combo.id}-${Date.now()}`,
-      type: 'jus',
-      size: 'medium',
-      basePrice: combo.price,
-      quantity: 1,
-      customizations: {
-        productName: `DUO ${t(combo.nameKey)}`,
-        description: `${combo.side1} / ${combo.side2}`
+  addToCart({
+    id: `duo-${combo.id}-${Date.now()}`,
+    type: 'jus',
+    size: 'medium',
+    basePrice: 9.99, // ✅ Prix fixe DUO
+    quantity: 1,
+    customizations: {
+      productName: `DUO ${t(combo.nameKey)}`,
+      description: `${combo.side1} / ${combo.side2}`
+    },
+    ingredients: [
+      {
+        id: combo.id + '-1',
+        name: combo.side1,
+        emoji: '🍹',
+        category: 'fruits',
+        price: 0, // ✅ Prix = 0€ car déjà dans basePrice
+        calories: 0,
+        allergens: []
       },
-      ingredients: [
-        {
-          id: combo.id + '-1',
-          name: combo.side1,
-          emoji: '🍹',
-          category: 'fruits',
-          price: 0,
-          calories: 0,
-          allergens: []
-        },
-        {
-          id: combo.id + '-2',
-          name: combo.side2,
-          emoji: '🍹',
-          category: 'fruits',
-          price: 0,
-          calories: 0,
-          allergens: []
-        }
-      ]
-    });
+      {
+        id: combo.id + '-2',
+        name: combo.side2,
+        emoji: '🍹',
+        category: 'fruits',
+        price: 0, // ✅ Prix = 0€
+        calories: 0,
+        allergens: []
+      }
+    ]
+  });
 
-    toast.success(`DUO ${t(combo.nameKey)} ajouté au panier !`);
-    setLocation('/panier');
-  };
+  toast.success(`DUO ${t(combo.nameKey)} ajouté au panier !`);
+  setLocation('/panier');
+};
 
-  const handleAddCustomCombo = () => {
-    if (!customFruit1 || !customFruit2) {
-      toast.error('Veuillez sélectionner 2 fruits');
-      return;
-    }
+const handleAddCustomCombo = () => {
+  if (!customFruit1 || !customFruit2) {
+    toast.error('Veuillez sélectionner 2 fruits');
+    return;
+  }
 
-    addToCart({
-      id: `duo-custom-${Date.now()}`,
-      type: 'jus',
-      size: 'medium',
-      basePrice: 9.99,
-      quantity: 1,
-      customizations: {
-        productName: `DUO ${customFruit1.name} / ${customFruit2.name}`,
-        description: `${customFruit1.name} / ${customFruit2.name}`
+  addToCart({
+    id: `duo-custom-${Date.now()}`,
+    type: 'jus',
+    size: 'medium',
+    basePrice: 9.99, // ✅ Prix fixe DUO
+    quantity: 1,
+    customizations: {
+      productName: `DUO ${customFruit1.name} / ${customFruit2.name}`,
+      description: `${customFruit1.name} / ${customFruit2.name}`
+    },
+    ingredients: [
+      {
+        id: customFruit1.id,
+        name: customFruit1.name,
+        emoji: '🍹',
+        category: 'fruits',
+        price: 0, // ✅ Prix = 0€
+        calories: 0,
+        allergens: []
       },
-      ingredients: [
-        {
-          id: customFruit1.id,
-          name: customFruit1.name,
-          emoji: '🍹',
-          category: 'fruits',
-          price: 0,
-          calories: 0,
-          allergens: []
-        },
-        {
-          id: customFruit2.id,
-          name: customFruit2.name,
-          emoji: '🍹',
-          category: 'fruits',
-          price: 0,
-          calories: 0,
-          allergens: []
-        }
-      ]
-    });
+      {
+        id: customFruit2.id,
+        name: customFruit2.name,
+        emoji: '🍹',
+        category: 'fruits',
+        price: 0, // ✅ Prix = 0€
+        calories: 0,
+        allergens: []
+      }
+    ]
+  });
 
-    toast.success(`DUO ${customFruit1.name} / ${customFruit2.name} ajouté au panier !`);
-    setLocation('/panier');
-  };
+  toast.success(`DUO ${customFruit1.name} / ${customFruit2.name} ajouté au panier !`);
+  setLocation('/panier');
+};
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] pb-20 pt-28">

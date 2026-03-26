@@ -1,5 +1,27 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
-import type { CartItem } from '@/lib/types';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+
+export interface Ingredient {
+  id: string;
+  name: string;
+  emoji: string;
+  category: string;
+  price: number;
+  calories: number;
+  allergens: string[];
+}
+
+export interface CartItem {
+  id: string;
+  type: 'jus' | 'smoothie';
+  size: string;
+  basePrice: number; // Prix de BASE (sans add-ons)
+  ingredients?: Ingredient[];
+  quantity: number;
+  customizations?: {
+    description?: string;
+    productName?: string;
+  };
+}
 
 interface CartContextType {
   cart: CartItem[];
@@ -8,95 +30,94 @@ interface CartContextType {
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
-  getTotalItems: () => number;
-  updateCartItemIngredients: (itemId: string, newIngredients: any[]) => void;
-  updateCartItemPrice: (itemId: string, newPrice: number) => void; 
+  getItemTotalPrice: (item: CartItem) => number;
+  updateCartItemIngredients: (itemId: string, newIngredients: Ingredient[]) => void;
+  updateCartItemPrice: (itemId: string, newPrice: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    const saved = localStorage.getItem('diy-cart');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('diy-cart', JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (item: CartItem) => {
-    setCart((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [...prev, item];
+    console.log('➕ AJOUT AU PANIER:', {
+      produit: item.customizations?.productName || item.type,
+      basePrice: item.basePrice,
+      ingredients: item.ingredients?.map(i => `${i.name} (${i.price}€)`),
+      totalCalculé: getItemTotalPrice(item)
     });
+    setCart(prev => [...prev, item]);
   };
 
   const removeFromCart = (id: string) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+    setCart(prev => prev.filter(item => item.id !== id));
   };
 
   const updateQuantity = (id: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeFromCart(id);
-      return;
-    }
-    setCart((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+    setCart(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, quantity } : item
+      )
     );
   };
-const updateCartItemIngredients = (itemId: string, newIngredients: any[]) => {
-  setCart(prevCart => 
-    prevCart.map(item => 
-      item.id === itemId 
-        ? { ...item, ingredients: newIngredients }
-        : item
-    )
-  );
-};
+
   const clearCart = () => {
     setCart([]);
+    localStorage.removeItem('diy-cart');
   };
 
+  const updateCartItemIngredients = (itemId: string, newIngredients: Ingredient[]) => {
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.id === itemId ? { ...item, ingredients: newIngredients } : item
+      )
+    );
+  };
+
+  const updateCartItemPrice = (itemId: string, newPrice: number) => {
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.id === itemId ? { ...item, basePrice: newPrice } : item
+      )
+    );
+  };
+
+const getItemTotalPrice = (item) => {
+  const basePrice = item.basePrice || 0;
+
+  const addonsPrice = item.ingredients
+    ?.filter(ing => ing.price > 0)
+    .reduce((sum, ing) => sum + ing.price, 0) || 0;
+
+  return basePrice + addonsPrice;
+};
   const getTotalPrice = () => {
-    return cart.reduce((total, item) => {
-      let itemPrice = item.basePrice;
-      if (item.ingredients) {
-        itemPrice += item.ingredients.reduce((sum, ing) => sum + ing.price, 0);
-      }
-      if (item.customizations?.extras) {
-        // Add extras price logic here if needed
-      }
-      return total + itemPrice * item.quantity;
+    return cart.reduce((sum, item) => {
+      const itemPrice = getItemTotalPrice(item);
+      return sum + (itemPrice * item.quantity);
     }, 0);
   };
 
-  const getTotalItems = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
-  };
-const updateCartItemPrice = (itemId: string, newPrice: number) => {
-  setCart(prevCart => 
-    prevCart.map(item => 
-      item.id === itemId 
-        ? { ...item, basePrice: newPrice }
-        : item
-    )
-  );
-};
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-     
-        getTotalPrice,
-        getTotalItems,
-
- clearCart ,
- updateCartItemIngredients,
- updateCartItemPrice
-      }}
-    >
+    <CartContext.Provider value={{
+      cart,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      getTotalPrice,
+      getItemTotalPrice,
+      updateCartItemIngredients,
+      updateCartItemPrice
+    }}>
       {children}
     </CartContext.Provider>
   );
@@ -104,12 +125,8 @@ const updateCartItemPrice = (itemId: string, newPrice: number) => {
 
 export function useCart() {
   const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within CartProvider');
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider');
   }
   return context;
-const clearCart = () => {
-    setCart([]);
-    localStorage.removeItem('diy-cart'); // Si vous utilisez localStorage
-  };
 }

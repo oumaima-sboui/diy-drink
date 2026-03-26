@@ -62,7 +62,7 @@ export function analyzeTaste(ingredients: Ingredient[]): TasteWarning[] {
   const spicyIngredients = ingredients.filter(ing => {
     const id = ing.id?.toLowerCase() || '';
     const name = ing.name?.toLowerCase() || '';
-    return ['cayenne', 'gingembre', 'cardamome', 'piment'].some(keyword => 
+    return ['cayenne', 'cardamome', 'piment'].some(keyword => 
       id.includes(keyword) || name.includes(keyword)
     );
   });

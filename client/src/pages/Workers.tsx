@@ -27,7 +27,7 @@ import { trpc } from "@/lib/trpc";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
-import { ClipboardList, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 
 const STATUS_LABELS = {
   pending_payment: "En attente de paiement",
@@ -66,7 +66,6 @@ export default function Workers() {
     },
   });
 
-  // Redirect if not worker or admin
   useEffect(() => {
     if (!authLoading && (!user || (user.role !== "worker" && user.role !== "admin"))) {
       setLocation("/");
@@ -81,7 +80,7 @@ export default function Workers() {
     });
   };
 
-  const handleViewDetails = async (order: any) => {
+  const handleViewDetails = (order: any) => {
     setSelectedOrder(order);
     setIsDetailsOpen(true);
   };
@@ -90,7 +89,6 @@ export default function Workers() {
     return null;
   }
 
-  // Statistiques
   const stats = {
     pending: orders?.filter(o => o.status === "pending_payment").length || 0,
     paid: orders?.filter(o => o.status === "paid").length || 0,
@@ -101,7 +99,6 @@ export default function Workers() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] pt-20">
-      {/* Header */}
       <header className="border-b border-border/40 bg-white">
         <div className="container py-6">
           <div className="flex items-center justify-between">
@@ -122,7 +119,6 @@ export default function Workers() {
         </div>
       </header>
 
-      {/* Statistics */}
       <div className="border-b border-border/40 bg-white">
         <div className="container py-4">
           <div className="flex gap-6 text-sm">
@@ -150,7 +146,6 @@ export default function Workers() {
         </div>
       </div>
 
-      {/* Main Content */}
       <main className="container py-8">
         {isLoading ? (
           <div className="text-center py-12">
@@ -159,7 +154,7 @@ export default function Workers() {
         ) : (
           <div className="bg-white rounded-lg border border-border/40 overflow-hidden">
             <Table>
-            <TableHeader>
+              <TableHeader>
                 <TableRow>
                   <TableHead>N° Commande</TableHead>
                   <TableHead>Montant</TableHead>
@@ -177,9 +172,11 @@ export default function Workers() {
                       return dateB - dateA;
                     })
                     .map((order) => (
-                  <TableRow key={order.id}>
+                      <TableRow key={order.id}>
                         <TableCell className="font-medium">{order.orderNumber}</TableCell>
-                        <TableCell className="font-semibold">{order.totalAmount}€</TableCell>
+                        <TableCell className="font-semibold text-lg">
+                          {order.totalAmount.toFixed(2)}€
+                        </TableCell>
                         <TableCell>
                           <Select
                             value={order.status || "pending_payment"}
@@ -235,12 +232,12 @@ export default function Workers() {
         )}
       </main>
 
-      {/* Order Details Dialog */}
-{/* Order Details Dialog */}
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Détails de la commande {selectedOrder?.orderNumber}</DialogTitle>
+            <DialogTitle className="text-2xl">
+              Détails de la commande {selectedOrder?.orderNumber}
+            </DialogTitle>
             <DialogDescription>
               Informations complètes de la commande
             </DialogDescription>
@@ -256,155 +253,86 @@ export default function Workers() {
                 </div>
                 <div>
                   <p className="text-muted-foreground">Total</p>
-                  <p className="font-semibold text-lg">{selectedOrder.totalAmount}€</p>
+                  <p className="font-semibold text-lg">{selectedOrder.totalAmount.toFixed(2)}€</p>
                 </div>
               </div>
 
-              {/* Articles de la commande */}
               {selectedOrder.items && selectedOrder.items.length > 0 ? (
                 <div>
                   <p className="font-bold text-lg text-[#004D40] mb-4">🛒 Articles de la commande</p>
                   <div className="space-y-4">
-                    {selectedOrder.items.map((item: any, idx: number) => (
-                      <div key={idx} className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
-                        <div className="flex justify-between items-start mb-3">
-                          <div className="flex-1">
-                            <p className="font-bold text-[#004D40] text-lg">
-                              {item.productName || item.type}
-                            </p>
-                            <p className="text-sm text-gray-500 mt-1">
-                              {item.size && `${item.size} • `}
-                              Quantité: {item.quantity}
-                            </p>
-                          </div>
-                          <p className="font-bold text-[#FF6F00] text-xl ml-4">
-                            {item.basePrice ? (item.basePrice * item.quantity).toFixed(2) : item.price.toFixed(2)}€
-                          </p>
-                        </div>
+                    {selectedOrder.items.map((item: any, idx: number) => {
+                      const basePrice = item.price || 0;
+                      const addonsPrice = item.ingredients
+                        ?.filter((ing: any) => ing.price > 0)
+                        .reduce((sum: number, ing: any) => sum + ing.price, 0) || 0;
+                      const itemTotal = (basePrice + addonsPrice) * item.quantity;
 
-                        {/* Ingrédients de base */}
-                        {item.ingredients && item.ingredients.length > 0 && (
-                          <div className="mt-3">
-                            <p className="text-xs font-semibold text-gray-600 mb-2">
-                              📋 Composition:
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                              {item.ingredients
-                                .filter((ing: any) => ing.price === 0)
-                                .map((ing: any, i: number) => (
-                                  <span key={i} className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                                    {ing.emoji} {ing.name}
-                                  </span>
-                                ))}
+                      return (
+                        <div key={idx} className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="flex-1">
+                              <p className="font-bold text-[#004D40] text-lg">
+                                {item.productName || item.type}
+                              </p>
+                              <p className="text-sm text-gray-500 mt-1">
+                                {item.size && `${item.size} • `}
+                                Quantité: {item.quantity}
+                              </p>
                             </div>
-                          </div>
-                        )}
-
-                        {/* Add-ons payants */}
-                        {item.ingredients && item.ingredients.some((ing: any) => ing.price > 0) && (
-                          <div className="mt-3 pt-3 border-t border-gray-200">
-                            <p className="text-xs font-semibold text-[#FF6F00] mb-2">
-                              ⚡ Add-ons:
+                            <p className="font-bold text-[#FF6F00] text-xl ml-4">
+                              {itemTotal.toFixed(2)}€
                             </p>
-                            <div className="space-y-2">
-                              {item.ingredients
-                                .filter((ing: any) => ing.price > 0)
-                                .map((addon: any, i: number) => (
-                                  <div key={i} className="flex items-center justify-between bg-[#FF6F00]/10 px-3 py-2 rounded-lg">
-                                    <span className="text-sm font-medium text-[#FF6F00]">
-                                      {addon.emoji} {addon.name}
-                                    </span>
-                                    <span className="text-sm font-bold text-[#FF6F00]">
-                                      +{addon.price.toFixed(2)}€
-                                    </span>
-                                  </div>
-                                ))}
-                            </div>
                           </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : selectedOrder.notes && selectedOrder.notes.includes('Détails:') ? (
-                /* Fallback: utiliser les notes si items n'existe pas */
-                <>
-                  {/* Notes du client (avant "Détails:") */}
-                  {selectedOrder.notes.split('Détails:')[0].trim() && (
-                    <div className="mb-6">
-                      <p className="font-medium mb-2 text-[#004D40]">📝 Notes du client</p>
-                      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-                        <p className="text-sm text-gray-700">
-                          {selectedOrder.notes.split('Détails:')[0].trim()}
-                        </p>
-                      </div>
-                    </div>
-                  )}
 
-                  {/* Détails des produits depuis notes */}
-                  <div>
-                    <p className="font-medium mb-4 text-[#004D40]">🛒 Articles de la commande</p>
-                    <div className="space-y-3">
-                      {selectedOrder.notes.split('Détails:')[1].trim().split('\n').map((line: string, idx: number) => {
-                        const productPart = line.split(':')[0];
-                        const ingredients = line.includes(':') ? line.split(':')[1].trim() : '';
-                        const productName = productPart.includes('+') ? productPart.split('+')[0].trim() : productPart.trim();
-                        
-                        let baseIngredients = ingredients;
-                        let addons: string[] = [];
-                        
-                        const knownAddons = [
-                          'whey protein', 'beurre de cacahuète', 'beurre d\'amande',
-                          'spiruline', 'graines de chia', 'graines de lin', 'maca',
-                          'shot gingembre', 'curcuma', 'matcha', 'cacao cru'
-                        ];
-                        
-                        if (ingredients) {
-                          const ingredientsList = ingredients.split(',').map(i => i.trim());
-                          baseIngredients = ingredientsList
-                            .filter(ing => !knownAddons.some(addon => ing.toLowerCase().includes(addon)))
-                            .join(', ');
-                          addons = ingredientsList
-                            .filter(ing => knownAddons.some(addon => ing.toLowerCase().includes(addon)));
-                        }
-                        
-                        return (
-                          <div key={idx} className="bg-blue-50 border-2 border-blue-200 p-4 rounded-lg">
-                            <p className="text-sm text-gray-800 font-bold mb-2">
-                              {productName}
-                            </p>
-                            
-                            {baseIngredients && (
-                              <div className="mt-2">
-                                <p className="text-xs font-semibold text-gray-600 mb-1">📋 Composition:</p>
-                                <p className="text-xs text-gray-600 italic">{baseIngredients}</p>
+                          {item.ingredients && item.ingredients.length > 0 && (
+                            <div className="mt-3">
+                              <p className="text-xs font-semibold text-gray-600 mb-2">
+                                📋 Composition:
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {item.ingredients
+                                  .filter((ing: any) => ing.price === 0)
+                                  .map((ing: any, i: number) => (
+                                    <span key={i} className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
+                                      {ing.emoji} {ing.name}
+                                    </span>
+                                  ))}
                               </div>
-                            )}
-                            
-                            {addons.length > 0 && (
-                              <div className="mt-3 pt-2 border-t border-blue-300">
-                                <p className="text-xs font-semibold text-[#FF6F00] mb-2">⚡ Add-ons:</p>
-                                <div className="space-y-1">
-                                  {addons.map((addon, i) => (
-                                    <div key={i} className="bg-[#FF6F00]/10 px-2 py-1 rounded">
-                                      <span className="text-xs font-medium text-[#FF6F00]">• {addon}</span>
+                            </div>
+                          )}
+
+                          {item.ingredients && item.ingredients.some((ing: any) => ing.price > 0) && (
+                            <div className="mt-3 pt-3 border-t border-gray-200">
+                              <p className="text-xs font-semibold text-[#FF6F00] mb-2">
+                                ⚡ Add-ons:
+                              </p>
+                              <div className="space-y-2">
+                                {item.ingredients
+                                  .filter((ing: any) => ing.price > 0)
+                                  .map((addon: any, i: number) => (
+                                    <div key={i} className="flex items-center justify-between bg-[#FF6F00]/10 px-3 py-2 rounded-lg">
+                                      <span className="text-sm font-medium text-[#FF6F00]">
+                                        {addon.emoji} {addon.name}
+                                      </span>
+                                      <span className="text-sm font-bold text-[#FF6F00]">
+                                        +{addon.price.toFixed(2)}€
+                                      </span>
                                     </div>
                                   ))}
-                                </div>
                               </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                </>
-              ) : selectedOrder.notes && !selectedOrder.notes.includes('Détails:') ? (
-                /* Seulement des notes, pas de détails */
+                </div>
+              ) : selectedOrder.notes ? (
                 <div>
-                  <p className="font-medium mb-2 text-[#004D40]">📝 Notes du client</p>
+                  <p className="font-medium mb-2 text-[#004D40]">📝 Notes</p>
                   <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-                    <p className="text-sm text-gray-700">{selectedOrder.notes}</p>
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{selectedOrder.notes}</p>
                   </div>
                 </div>
               ) : (

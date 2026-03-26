@@ -6,12 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from 'sonner';
+import { useLocation } from 'wouter';
 import { ShoppingCart, Leaf, Coffee, Cookie } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-
+import { ingredients } from '@/lib/data';
 export default function Menu() {
   const { t } = useTranslation();
-  const { addToCart } = useCart();
+    const [location, setLocation] = useLocation();
+const { addToCart } = useCart();
   const [activeTab, setActiveTab] = useState('jus');
 const ADDONS_JUS = [
   { id: 'shot-gingembre', nameKey: 'addon.gingerShot', descKey: 'addon.gingerShotDesc', price: 1.50, emoji: '🔥', allergens: [] },
@@ -503,47 +505,79 @@ const ADDONS_SMOOTHIE = [
 ],
   };
 
-  const handleAddToCart = (product: any, type: string) => {
-    const displayName = product.name || t(product.nameKey);
-    const displayDescription = product.description || t(product.descKey);
+// Fonction pour ajouter un produit SANS add-ons
+const handleAddToCart = (product: any) => {
+  const productIngredients = product.ingredientsList?.map((ingName: string) => {
+    const foundIng = ingredients.find(i => i.name === ingName);
+    return {
+      id: foundIng?.id || ingName.toLowerCase().replace(/\s+/g, '-'),
+      name: ingName,
+      emoji: foundIng?.emoji || '🥤',
+      category: foundIng?.category || 'fruits',
+      price: 0, // ✅ Ingrédients de base = 0€
+      calories: foundIng?.calories || 0,
+      allergens: foundIng?.allergens || []
+    };
+  }) || [];
 
-    // Convertir ingredientsList en format Ingredient[]
-    const productIngredients = product.ingredientsList 
-      ? product.ingredientsList.map((ingName: string, index: number) => ({
-          id: `${product.id}-ing-${index}`,
-          name: ingName,
-          emoji: type === 'jus' ? '🧃' : type === 'smoothie' ? '🥤' : type === 'boisson_chaude' ? '☕' : type === 'eau_boisson' ? '💧' : '🍪',
-          category: 'bases',
-          price: 0,
-          calories: 0,
-          allergens: []
-        }))
-      : [{
-          id: product.id,
-          name: displayName,
-          emoji: type === 'jus' ? '🧃' : type === 'smoothie' ? '🥤' : type === 'boisson_chaude' ? '☕' : type === 'eau_boisson' ? '💧' : '🍪',
-          category: 'bases',
-          price: 0,
-          calories: 0,
-          allergens: []
-        }];
+  addToCart({
+    id: `menu-${product.id}-${Date.now()}`,
+    type: product.category === 'jus' ? 'jus' : 'smoothie',
+    size: 'medium',
+    basePrice: product.price, // ✅ Prix de base SEULEMENT
+    quantity: 1,
+    customizations: {
+      productName: t(product.nameKey),
+      description: product.ingredientsList?.join(', ')
+    },
+    ingredients: productIngredients
+  });
 
-    addToCart({
-      id: `${type}-${product.id}-${Date.now()}`,
-      type: type as any,
-      size: 'moyen',
-      basePrice: product.price,
-      quantity: 1,
-      customizations: {
-  description: displayDescription,
-  productName: displayName + (selectedAddons.length > 0 
-    ? ` + ${selectedAddons.map(a => t(a.nameKey)).join(', ')}` 
-    : '')
-},
-      ingredients: productIngredients
-    });
-    toast.success(`${displayName} ${t('menu.addedToCart')}`);
-  };
+  toast.success(`${t(product.nameKey)} ${t('menu.addedToCart')}`);
+  setLocation('/panier');
+};
+
+// Fonction pour ajouter un produit AVEC add-ons
+const handleAddToCartWithAddons = (product: any, selectedAddons: any[]) => {
+  const productIngredients = product.ingredientsList?.map((ingName: string) => {
+    const foundIng = ingredients.find(i => i.name === ingName);
+    return {
+      id: foundIng?.id || ingName.toLowerCase().replace(/\s+/g, '-'),
+      name: ingName,
+      emoji: foundIng?.emoji || '🥤',
+      category: foundIng?.category || 'fruits',
+      price: 0, // ✅ Ingrédients de base = 0€
+      calories: foundIng?.calories || 0,
+      allergens: foundIng?.allergens || []
+    };
+  }) || [];
+
+  console.log('🛒 AJOUT AU PANIER:', {
+    produit: t(product.nameKey),
+    prixBase: product.price,
+    addons: selectedAddons.map(a => `${a.name}: ${a.price}€`),
+    totalAddons: selectedAddons.reduce((sum, a) => sum + a.price, 0)
+  });
+
+  addToCart({
+    id: `menu-${product.id}-${Date.now()}`,
+    type: product.category === 'jus' ? 'jus' : 'smoothie',
+    size: 'medium',
+    basePrice: product.price, 
+    quantity: 1,
+    customizations: {
+      productName: t(product.nameKey),
+      description: product.ingredientsList?.join(', ')
+    },
+    ingredients: [
+      ...productIngredients, // Ingrédients de base (price = 0)
+      ...selectedAddons // Add-ons (price > 0)
+    ]
+  });
+
+  toast.success(`${t(product.nameKey)} ${t('menu.addedToCart')}`);
+  setLocation('/panier');
+};
 const AddOnSelector = ({ addons, onAddonsChange }: { 
   addons: any[], 
   onAddonsChange: (selected: any[]) => void 
@@ -604,66 +638,76 @@ const AddOnSelector = ({ addons, onAddonsChange }: {
   );
 };
 const ProductCard = ({ product, type }: { product: any, type: string }) => {
-  const displayName = product.name || t(product.nameKey);
-  const displayDescription = product.description || t(product.descKey);
+  const { t } = useTranslation();
+  const [, setLocation] = useLocation();
+  const { addToCart } = useCart();
+  
+  const displayName = product.name || t(product.nameKey || '');
+  const displayDescription = product.description || t(product.descKey || '');
   const displayTags = product.tags || ["Café"];
   const displayColor = product.color || "from-amber-700 to-orange-600";
   const allergens = product.allergens || [];
   
   const [selectedAddons, setSelectedAddons] = useState<any[]>([]);
   
-  // Déterminer quels add-ons afficher
   const availableAddons = type === 'jus' ? ADDONS_JUS : type === 'smoothie' ? ADDONS_SMOOTHIE : [];
   
-  const handleAddToCartWithAddons = () => {
-    const totalPrice = product.price + selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+  const handleAddToCartClick = () => {
+    console.log('🔵 BOUTON CLIQUÉ');
+    console.log('🔵 PRODUIT:', product);
+    console.log('🔵 ADD-ONS SÉLECTIONNÉS:', selectedAddons);
     
-    // Créer la liste d'ingrédients (produit + addons)
-    const productIngredients = product.ingredientsList 
-      ? product.ingredientsList.map((ingName: string, index: number) => ({
-          id: `${product.id}-ing-${index}`,
+    const basePrice = product.price;
+    
+    // Préparer les ingrédients de base
+    let productIngredients: any[] = [];
+    
+    if (product.ingredientsList && Array.isArray(product.ingredientsList)) {
+      productIngredients = product.ingredientsList.map((ingName: string) => {
+        const foundIng = ingredients.find(i => i.name === ingName);
+        return {
+          id: foundIng?.id || ingName.toLowerCase().replace(/\s+/g, '-'),
           name: ingName,
-          emoji: type === 'jus' ? '🧃' : '🥤',
-          category: 'bases',
-          price: 0,
-          calories: 0,
-          allergens: []
-        }))
-      : [{
-          id: product.id,
-          name: displayName,
-          emoji: type === 'jus' ? '🧃' : '🥤',
-          category: 'bases',
-          price: 0,
-          calories: 0,
-          allergens: []
-        }];
+          emoji: foundIng?.emoji || '🥤',
+          category: foundIng?.category || 'fruits',
+          price: 0, // Ingrédients de base = 0€
+          calories: foundIng?.calories || 0,
+          allergens: foundIng?.allergens || []
+        };
+      });
+    }
 
-    // Ajouter les add-ons aux ingrédients
-    const addonIngredients = selectedAddons.map(addon => ({
-      id: addon.id,
-      name: t(addon.nameKey),
-      emoji: addon.emoji,
-      category: 'superfoods',
-      price: addon.price,
-      calories: 0,
-      allergens: addon.allergens
-    }));
+    console.log('🔵 INGRÉDIENTS DE BASE:', productIngredients);
+    console.log('🔵 TYPE:', type);
 
-    addToCart({
-      id: `${type}-${product.id}-${Date.now()}`,
-      type: type as any,
-      size: 'moyen',
-      basePrice: totalPrice,
+    const cartItem = {
+      id: `menu-${product.id}-${Date.now()}`,
+      type: (type === 'jus' || type === 'smoothie') ? type as 'jus' | 'smoothie' : 'jus',
+      size: 'medium',
+      basePrice: basePrice,
       quantity: 1,
       customizations: {
-        description: displayDescription,
-        productName: displayName + (selectedAddons.length > 0 ? ` + ${selectedAddons.length} add-on(s)` : '')
+        productName: product.name || t(product.nameKey || ''),
+        description: product.ingredientsList?.join(', ') || ''
       },
-      ingredients: [...productIngredients, ...addonIngredients]
-    });
-    
-    toast.success(`${displayName} ${t('menu.addedToCart')}`);
+      ingredients: [
+        ...productIngredients, // Ingrédients de base (price = 0)
+        ...selectedAddons // Add-ons (price > 0)
+      ]
+    };
+
+    console.log('🔵 ITEM FINAL À AJOUTER:', cartItem);
+
+    try {
+      addToCart(cartItem);
+      console.log('✅ AJOUT RÉUSSI');
+      const productName = product.name || t(product.nameKey || '');
+      toast.success(`${productName} ajouté au panier !`);
+      setLocation('/panier');
+    } catch (error) {
+      console.error('❌ ERREUR LORS DE L\'AJOUT:', error);
+      toast.error('Erreur lors de l\'ajout au panier');
+    }
   };
 
   return (
@@ -702,30 +746,24 @@ const ProductCard = ({ product, type }: { product: any, type: string }) => {
             {displayDescription}
           </p>
 
-          {/* Section Allergènes */}
-          <div className="mb-4 pb-4 border-t pt-3">
-            <p className="text-xs font-semibold text-gray-500 mb-2">
-              {t('allergens.title')}
-            </p>
-            {allergens.length > 0 ? (
+          {allergens && allergens.length > 0 && (
+            <div className="mb-4 pb-4 border-t pt-3">
+              <p className="text-xs font-semibold text-gray-500 mb-2">
+                Allergènes
+              </p>
               <div className="flex flex-wrap gap-1">
                 {allergens.map((allergen: string) => (
                   <span 
                     key={allergen}
                     className="text-xs px-2 py-1 bg-red-50 text-red-700 rounded-full border border-red-200 font-medium"
                   >
-                    {t(`allergens.${allergen}`)}
+                    {allergen}
                   </span>
                 ))}
               </div>
-            ) : (
-              <span className="text-xs text-green-600 font-medium">
-                ✓ {t('allergens.none')}
-              </span>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* Add-ons Selector (seulement pour jus et smoothies) */}
           {availableAddons.length > 0 && (
             <AddOnSelector 
               addons={availableAddons} 
@@ -734,18 +772,17 @@ const ProductCard = ({ product, type }: { product: any, type: string }) => {
           )}
           
           <Button 
-            onClick={handleAddToCartWithAddons}
+            onClick={handleAddToCartClick}
             className="w-full bg-[#004D40] hover:bg-[#00695C] text-white rounded-full group mt-4"
           >
             <ShoppingCart className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-            {t('menu.addToCart')}
+            Ajouter au panier
           </Button>
         </div>
       </Card>
     </motion.div>
   );
 };
-
   return (
     <div className="min-h-screen bg-[#FAF8F3] pt-28 pb-20">
       <div className="container mx-auto px-4">

@@ -79,16 +79,32 @@ export default function Composer() {
       setSelectedIngredients([...selectedIngredients, ingredient]);
     }
   };
-  
+
+
   const calculateTotal = () => {
-    const basePrice = drinkType === 'jus' 
-      ? (selectedSize.id === 'medium' ? 7.99 : 8.99)
-      : (selectedSize.id === 'medium' ? 8.99 : 9.99);
-    
-    const ingredientsTotal = selectedIngredients.reduce((sum, ing) => sum + ing.price, 0);
-    return basePrice + ingredientsTotal;
-  };
+  let basePrice = 0;
   
+  if (drinkType === 'jus') {
+    basePrice = selectedSize === 'medium' ? 7.99 : 8.99;
+  } else {
+    basePrice = selectedSize === 'medium' ? 8.99 : 9.99;
+  }
+  
+  // Les ingrédients du composer sont INCLUS dans le prix de base
+  // Donc on n'ajoute RIEN
+  return basePrice;
+};
+  const calculateDisplayTotal = () => {
+  const baseTotal = calculateTotal();
+
+  const ingredientsTotal = selectedIngredients.reduce(
+    (total, ing) => total + ing.price,
+    0
+  );
+
+  return baseTotal + ingredientsTotal;
+};
+
   const handleAddToCart = () => {
     if (selectedIngredients.length === 0) {
       toast.error(t('composer.errorNoIngredient', 'Veuillez sélectionner au moins un ingrédient'));
@@ -297,7 +313,7 @@ const getIngredientsForStep = () => {
           </div>
 
           <div className="font-bold text-[#FF6F00] text-lg">
-            {calculateTotal().toFixed(2)}€
+            {calculateDisplayTotal().toFixed(2)}€
           </div>
         </div>
       </header>
@@ -478,10 +494,13 @@ const getIngredientsForStep = () => {
 
             <div className="flex items-center gap-4">
               <div className="text-right hidden md:block">
-                <div className="text-xs text-gray-500">{t('composer.estimatedTotal')}</div>
-                <div className="font-bold text-xl text-[#004D40]">{calculateTotal().toFixed(2)}€</div>
+
+
+              <div className="text-xs text-gray-500">{t('composer.estimatedTotal')}</div>
+                <div className="font-bold text-xl text-[#004D40]">{calculateDisplayTotal().toFixed(2)}€</div>
+
               </div>
-              
+           
               {currentStep < 4 ? (
                 <Button 
                   onClick={nextStep}

@@ -456,10 +456,16 @@ orders: router({
             clientPhone: z.string().optional(),
             items: z.array(
               z.object({
-                productId: z.number(),
-                quantity: z.number().positive(),
+                 productId: z.number().optional(), // Optionnel car composer n'a pas de productId
+            productName: z.string(),
+            quantity: z.number().positive(),
+            price: z.number(), // Prix TOTAL de l'item (base + add-ons)
+            size: z.string().optional(),
+            description: z.string().optional(),
+            ingredients: z.array(z.any()).optional()
               })
             ),
+            totalAmount: z.number(),
             notes: z.string().optional(),
           })
         )
@@ -495,7 +501,7 @@ const orderNumber = `CMD-${maxId + 1}`;
             orderNumber,
             clientName: input.clientName || "Client anonyme",
             clientPhone: input.clientPhone || "",
-            totalAmount,
+          totalAmount: input.totalAmount,
             status: "paid", // Statut initial : payée
             notes: input.notes,
           });

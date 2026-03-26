@@ -21,14 +21,12 @@ import Logo from "@/components/Logo";
 export default function Payment() {
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
-  const { cart, getTotalPrice, clearCart } = useCart();
+ const { cart, getTotalPrice, getItemTotalPrice, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "mobile">("card");
   const [clientInfo, setClientInfo] = useState({
-    name: "",
-    phone: "",
     notes: "",
   });
 
@@ -37,7 +35,8 @@ export default function Payment() {
     expiration: "",
     cvv: "",
   });
-const utils = trpc.useUtils();
+
+  const utils = trpc.useUtils();
   const createOrderMutation = trpc.orders.create.useMutation();
   const createPaymentMutation = trpc.payments.create.useMutation();
 
@@ -45,22 +44,18 @@ const utils = trpc.useUtils();
   const validateCard = (): boolean => {
     if (paymentMethod !== "card") return true;
 
-    // Enlever les espaces du numéro de carte
     const cleanNumber = cardInfo.number.replace(/\s/g, '');
 
-    // Validation numéro (13-19 chiffres)
     if (!/^[0-9]{13,19}$/.test(cleanNumber)) {
       toast.error(t('payment.invalidCard', "Numéro de carte invalide (13-19 chiffres)"));
       return false;
     }
 
-    // Validation expiration (MM/AA)
     if (!/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(cardInfo.expiration)) {
       toast.error(t('payment.invalidExpiration', "Date d'expiration invalide (MM/AA)"));
       return false;
     }
 
-    // Validation CVV (3-4 chiffres)
     if (!/^[0-9]{3,4}$/.test(cardInfo.cvv)) {
       toast.error(t('payment.invalidCvv', "CVV invalide (3-4 chiffres)"));
       return false;
@@ -70,84 +65,130 @@ const utils = trpc.useUtils();
   };
 
   const handlePayment = async () => {
-   
-
     if (cart.length === 0) {
       toast.error(t('payment.cartEmpty'));
       return;
     }
 
-    // 2. Validation carte si paiement par carte
     if (!validateCard()) {
       return;
     }
 
     setIsProcessing(true);
 
-try {
-      // 3. Créer la commande
-      const orderItems = [{
-        productId: 1,
-        quantity: cart.reduce((sum, item) => sum + item.quantity, 0),
-        price: item.basePrice * item.quantity, 
-  ingredients: item.ingredients || [] 
-      }];
+    try {
+      // Calculer les totaux
+      const subtotal = getTotalPrice();
+      const tax = subtotal * 0.03;
+      const total = subtotal + tax;
 
-      const cartDetails = cart.map(item => {
-        if (item.customizations?.description) {
-          return `${item.quantity}x ${item.customizations.productName || item.type}: ${item.customizations.description}`;
+      console.log('🛒 CART:', cart);
+      console.log('💰 SUBTOTAL:', subtotal.toFixed(2));
+      console.log('💰 TAX:', tax.toFixed(2));
+      console.log('💰 TOTAL:', total.toFixed(2));
+
+      // Créer les items pour la commande
+     const orderItems = cart.map((cartItem, index) => {
+  const itemTotalPrice = getItemTotalPrice(cartItem);
+  
+  let itemDescription = '';
+  
+  if (cartItem.ingredients && cartItem.ingredients.length > 0) {
+    const baseIngredients = cartItem.ingredients
+      .filter(ing => ing.price === 0)
+      .map(ing => ing.name)
+      .join(', ');
+    
+    const addons = cartItem.ingredients
+      .filter(ing => ing.price > 0)
+      .map(ing => `${ing.name} (+${ing.price.toFixed(2)}€)`)
+      .join(', ');
+    
+    itemDescription = baseIngredients;
+    if (addons) {
+      itemDescription += ` | Add-ons: ${addons}`;
+    }
+  }
+
+  return {
+    productId: index + 1,
+    productName: cartItem.customizations?.productName || t(`composer.${cartItem.type}`),
+    quantity: cartItem.quantity,
+    price: itemTotalPrice, // ✅ Prix TOTAL (base + add-ons)
+    size: cartItem.size || 'medium',
+    description: itemDescription,
+    ingredients: cartItem.ingredients || []
+  };
+});
+
+      console.log('📦 ORDER ITEMS:', orderItems);
+
+      // Préparer les détails pour les notes
+      const cartDetails = cart.map(cartItem => {
+        const productName = cartItem.customizations?.productName || t(`composer.${cartItem.type}`);
+        
+        if (cartItem.ingredients && cartItem.ingredients.length > 0) {
+          const allIngredients = cartItem.ingredients.map(ing => ing.name).join(', ');
+          return `${cartItem.quantity}x ${productName}: ${allIngredients}`;
         }
-        const ingredients = item.ingredients 
-          ? ` (${item.ingredients.map(ing => ing.name).slice(0, 3).join(', ')})`
-          : '';
-        return `${item.quantity}x ${item.type} ${item.size || ''}${ingredients}`;
+        
+        return `${cartItem.quantity}x ${productName} ${cartItem.size || ''}`;
       }).join('\n');
 
-      // 👇 CETTE LIGNE ÉTAIT MANQUANTE
       const fullNotes = clientInfo.notes 
-        ? `${clientInfo.notes}\n\nDétails: ${cartDetails}`
-        : `Détails: ${cartDetails}`;
+        ? `${clientInfo.notes}\n\nDétails:\n${cartDetails}`
+        : `Détails:\n${cartDetails}`;
 
-      const orderResult = await createOrderMutation.mutateAsync({
+      // Créer la commande
+      const orderData = {
         clientName: "Client",
         clientPhone: "-",
         items: orderItems,
-        notes: fullNotes, // 👈 Maintenant fullNotes existe
-      });
+        totalAmount: parseFloat(total.toFixed(2)),
+        notes: fullNotes
+      };
 
-      console.log("✅ Commande créée:", orderResult.order.orderNumber);
+      console.log('📝 ORDER DATA:', orderData);
 
-      // Forcer le rafraîchissement
+      const orderResult = await createOrderMutation.mutateAsync(orderData);
+
+      console.log('✅ Commande créée:', orderResult.order.orderNumber);
+
+      // Rafraîchir la liste des commandes
       await utils.orders.list.invalidate();
-      // 4. Créer le paiement
-      await createPaymentMutation.mutateAsync({
+
+      // Créer le paiement
+      const paymentData = {
         orderId: orderResult.order.id!,
-        amount: getTotalPrice() * 1.03, // Avec TVA
-        paymentMethod: paymentMethod,
-      });
+        amount: parseFloat(total.toFixed(2)),
+        paymentMethod: paymentMethod
+      };
 
-      console.log("✅ Paiement enregistré");
+      console.log('💳 PAYMENT DATA:', paymentData);
 
-      // 5. Simuler le traitement du paiement
+      await createPaymentMutation.mutateAsync(paymentData);
+
+      console.log('✅ Paiement enregistré');
+
+      // Simuler le traitement du paiement
       if (paymentMethod === "card") {
-        // Simulation : En production, ici on appellerait Stripe API
-        console.log("💳 Simulation traitement carte...");
+        console.log('💳 Simulation traitement carte...');
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("✅ Paiement carte validé (simulation)");
+        console.log('✅ Paiement carte validé (simulation)');
       }
 
-      // 6. Afficher le succès
+      // Afficher le succès
       setPaymentSuccess(true);
       
-      // 7. Vider le panier et rediriger après 3 secondes
+      // Vider le panier et rediriger après 3 secondes
       setTimeout(() => {
         clearCart();
         toast.success(`${t('payment.orderCreated')} ${orderResult.order.orderNumber}`);
-        setLocation("/");
+        setLocation('/');
       }, 3000);
 
     } catch (error: any) {
-      console.error("❌ Erreur paiement:", error);
+      console.error('❌ Erreur paiement:', error);
       toast.error(error.message || t('payment.error'));
       setIsProcessing(false);
     }
@@ -175,13 +216,13 @@ try {
 
   // Si panier vide, retour au panier
   if (cart.length === 0) {
-    setLocation("/panier");
+    setLocation('/panier');
     return null;
   }
 
-  const totalHT = getTotalPrice();
-  const tva = totalHT * 0.03;
-  const totalTTC = totalHT + tva;
+  const subtotal = getTotalPrice();
+  const tax = subtotal * 0.03;
+  const total = subtotal + tax;
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] pt-28 pb-20">
@@ -189,7 +230,7 @@ try {
       <header className="fixed top-0 left-0 right-0 bg-white border-b border-border z-50">
         <div className="container py-4">
           <div className="flex items-center justify-between">
-            <button onClick={() => setLocation("/panier")} className="flex items-center gap-2">
+            <button onClick={() => setLocation('/panier')} className="flex items-center gap-2">
               <Logo size={32} />
               <span className="text-2xl font-bold text-primary">DIY</span>
             </button>
@@ -210,7 +251,7 @@ try {
                   <textarea
                     id="notes"
                     value={clientInfo.notes}
-                    onChange={(e) => setClientInfo({ ...clientInfo, notes: e.target.value })}
+                    onChange={(e) => setClientInfo({ notes: e.target.value })}
                     placeholder={t('payment.notesPlaceholder')}
                     className="w-full min-h-[100px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#004D40] resize-none"
                   />
@@ -260,7 +301,6 @@ try {
                         placeholder="4242 4242 4242 4242"
                         value={cardInfo.number}
                         onChange={(e) => {
-                          // Auto-format avec espaces tous les 4 chiffres
                           let value = e.target.value.replace(/\s/g, '');
                           value = value.match(/.{1,4}/g)?.join(' ') || value;
                           setCardInfo({...cardInfo, number: value});
@@ -275,7 +315,6 @@ try {
                           placeholder="12/25"
                           value={cardInfo.expiration}
                           onChange={(e) => {
-                            // Auto-format MM/AA
                             let value = e.target.value.replace(/\D/g, '');
                             if (value.length >= 2) {
                               value = value.slice(0, 2) + '/' + value.slice(2, 4);
@@ -326,14 +365,37 @@ try {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  {cart.map((item) => (
-                    <div key={item.id} className="flex justify-between text-sm pb-2 border-b">
-                      <span className="text-muted-foreground">
-                        {item.quantity}x {item.type} {item.size && `(${item.size})`}
-                      </span>
-                      <span className="font-semibold">
-                        {(item.basePrice * item.quantity).toFixed(2)}€
-                      </span>
+                  {cart.map((cartItem) => (
+                    <div key={cartItem.id} className="pb-3 border-b">
+                    <div className="flex justify-between text-sm mb-1">
+  <span className="font-medium text-gray-700">
+    {cartItem.quantity}x {cartItem.customizations?.productName || t(`composer.${cartItem.type}`)}
+  </span>
+  <span className="font-semibold text-[#004D40]">
+    {(getItemTotalPrice(cartItem) * cartItem.quantity).toFixed(2)}€
+  </span>
+</div>
+                      {cartItem.size && (
+                        <p className="text-xs text-gray-500">{cartItem.size}</p>
+                      )}
+                      {cartItem.ingredients && cartItem.ingredients.length > 0 && (
+                        <div className="mt-1">
+                          <p className="text-xs text-gray-600">
+                            {cartItem.ingredients
+                              .filter(ing => ing.price === 0)
+                              .map(ing => ing.name)
+                              .join(', ')}
+                          </p>
+                          {cartItem.ingredients.some(ing => ing.price > 0) && (
+                            <p className="text-xs text-[#FF6F00] mt-1">
+                              + {cartItem.ingredients
+                                .filter(ing => ing.price > 0)
+                                .map(ing => `${ing.name} (+${ing.price.toFixed(2)}€)`)
+                                .join(', ')}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -341,15 +403,15 @@ try {
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>{t('cart.subtotal')}</span>
-                    <span>{totalHT.toFixed(2)}€</span>
+                    <span className="font-semibold">{subtotal.toFixed(2)}€</span>
                   </div>
                   <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>{t('cart.tax')}</span>
-                    <span>{tva.toFixed(2)}€</span>
+                    <span>{t('cart.tax')} (3%)</span>
+                    <span>{tax.toFixed(2)}€</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold text-primary border-t pt-2">
                     <span>{t('cart.total')}</span>
-                    <span>{totalTTC.toFixed(2)}€</span>
+                    <span>{total.toFixed(2)}€</span>
                   </div>
                 </div>
 
@@ -366,7 +428,7 @@ try {
                   ) : (
                     <>
                       <CreditCard className="mr-2 h-5 w-5" />
-                      {t('payment.pay')} {totalTTC.toFixed(2)}€
+                      {t('payment.pay')} {total.toFixed(2)}€
                     </>
                   )}
                 </Button>
