@@ -1,31 +1,38 @@
-import type { Request } from 'express';
+import type { CookieOptions, Request } from "express";
 
-export function getSessionCookieOptions(req: Request) {
-  const isProd = process.env.NODE_ENV === 'production';
-  const isRailway = process.env.RAILWAY_ENVIRONMENT === 'production';
+const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 
-  console.log('🍪 Cookie config:', {
-    isProd,
-    isRailway,
-    host: req.get('host'),
-    origin: req.get('origin')
-  });
+function isIpAddress(host: string) {
+  // Basic IPv4 check and IPv6 presence detection.
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(host)) return true;
+  return host.includes(":");
+}
 
-  if (isProd || isRailway) {
-    return {
-      httpOnly: true,
-      secure: true, // HTTPS obligatoire
-      sameSite: 'none' as const, // Permettre cross-origin
-      path: '/',
-      domain: undefined // Ne pas spécifier de domaine
-    };
-  }
+function isSecureRequest(req: Request) {
+  if (req.protocol === "https") return true;
 
-  // Développement local
+  const forwardedProto = req.headers["x-forwarded-proto"];
+  if (!forwardedProto) return false;
+
+  const protoList = Array.isArray(forwardedProto)
+    ? forwardedProto
+    : forwardedProto.split(",");
+
+  return protoList.some(proto => proto.trim().toLowerCase() === "https");
+}
+export function getSessionCookieOptions(
+  req: Request
+): Pick<CookieOptions, "domain" | "httpOnly" | "path" | "sameSite" | "secure"> {
+  const isSecure = isSecureRequest(req);
+  const hostname = req.hostname;
+  const isLocal = LOCAL_HOSTS.has(hostname) || hostname === '127.0.0.1';
+
   return {
     httpOnly: true,
-    secure: false,
-    sameSite: 'lax' as const,
-    path: '/'
+    path: "/",
+    // En local (HTTP), utiliser 'lax' au lieu de 'none'
+    // En production (HTTPS), utiliser 'none' pour permettre les requêtes cross-origin
+    sameSite: isLocal ? "lax" : "none",
+    secure: isSecure,
   };
 }
