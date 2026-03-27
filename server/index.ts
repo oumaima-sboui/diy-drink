@@ -2,6 +2,8 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from 'cors';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,3 +33,9 @@ async function startServer() {
 }
 
 startServer().catch(console.error);
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://diy-drink-production.up.railway.app'] 
+    : ['http://localhost:5000'],
+  credentials: true
+}));
