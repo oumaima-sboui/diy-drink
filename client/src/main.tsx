@@ -36,7 +36,16 @@ queryClient.getMutationCache().subscribe(event => {
     console.error("[API Mutation Error]", error);
   }
 });
-
+httpBatchLink({
+  url: import.meta.env.VITE_API_URL,
+  transformer: superjson,
+  fetch(input, init) {
+    return fetch(input, {
+      ...(init ?? {}),
+      credentials: "include",
+    });
+  },
+});
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
