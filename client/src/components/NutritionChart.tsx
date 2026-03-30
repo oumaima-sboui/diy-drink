@@ -1,4 +1,5 @@
 import { Doughnut, Bar } from 'react-chartjs-2';
+import { calculateNutrition, calculateTotalCalories } from '@/lib/nutrition';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -10,7 +11,6 @@ import {
   Title,
 } from 'chart.js';
 import { Ingredient } from '@/lib/types';
-import { calculateNutrition } from '@/lib/nutrition';
 
 // Enregistrer les composants Chart.js
 ChartJS.register(
@@ -29,6 +29,7 @@ interface NutritionChartProps {
 
 export default function NutritionChart({ ingredients }: NutritionChartProps) {
   const { macros, vitamins, minerals } = calculateNutrition(ingredients);
+  const totalCalories = calculateTotalCalories(ingredients);
   // Données pour le graphique en donut des macronutriments
   const macrosData = {
     labels: ['Protéines', 'Glucides', 'Lipides', 'Fibres'],
@@ -176,6 +177,16 @@ export default function NutritionChart({ ingredients }: NutritionChartProps) {
 
   return (
     <div className="space-y-6">
+        {/* Total des calories */}
+    <div className="bg-gradient-to-r from-[#FF6F00]/10 to-[#FF8F00]/10 border-2 border-[#FF6F00]/30 rounded-xl p-4 text-center">
+      <p className="text-xs font-semibold text-gray-600 mb-1">
+        Total des calories
+      </p>
+      <p className="text-4xl font-bold text-[#FF6F00]">
+        {totalCalories}
+        <span className="text-lg font-normal text-gray-600 ml-1">kcal</span>
+      </p>
+    </div>
       {/* Graphique Macronutriments */}
       <div>
         <h4 className="text-sm font-semibold mb-3 text-center">Répartition des Macronutriments</h4>

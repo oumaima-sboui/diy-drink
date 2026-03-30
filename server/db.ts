@@ -1,26 +1,21 @@
-import { desc, eq, sql } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
-import {
-  InsertProduct,
-  InsertUser,
-  InsertCategory,
-  InsertIngredient,
-  InsertRecipe,
-  InsertOrder,
-  InsertOrderItem,
-  InsertPayment,
-  InsertInventoryLog,
-  products,
-  users,
-  categories,
-  ingredients,
-  recipes,
-  orders,
-  orderItems,
-  payments,
-  inventoryLogs,
-} from "../drizzle/schema";
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import * as schema from './schema-postgres';
+
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('❌ DATABASE_URL is not set');
+}
+
+// Créer la connexion PostgreSQL
+const client = postgres(connectionString);
+export const db = drizzle(client, { schema });
+
+console.log('✅ PostgreSQL connected');
+
+// ... Garder toutes vos fonctions existantes (getUserByEmail, createUser, etc.)
+// Mais adapter les requêtes pour PostgreSQL si nécessaire
 import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;

@@ -275,7 +275,9 @@ export function generateDrinkName(ingredients: Ingredient[]): string {
 
   return names[Math.floor(Math.random() * names.length)];
 }
-
+export function calculateTotalCalories(ingredients: Ingredient[]): number {
+  return ingredients.reduce((total, ing) => total + ing.calories, 0);
+}
 // Calcul des valeurs nutritionnelles totales
 export function calculateNutrition(ingredients: Ingredient[], sizeMultiplier: number = 1) {
   let totalCalories = 0;
@@ -311,6 +313,7 @@ export function calculateNutrition(ingredients: Ingredient[], sizeMultiplier: nu
       allBenefits.push(...nutrition.benefits);
     }
   });
+
 
   // Badges de bénéfices
   const badges: { icon: string; label: string }[] = [];

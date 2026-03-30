@@ -10,7 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ShoppingCart, AlertTriangle, ArrowRight, ArrowLeft, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { checkIncompatibility } from '@/lib/helpers';
-import { generateDrinkName } from '@/lib/nutrition';
+import { generateDrinkName, calculateTotalCalories } from '@/lib/nutrition';
 import Logo from '@/components/Logo';
 import NutritionChart from '@/components/NutritionChart';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -343,54 +343,67 @@ const getIngredientsForStep = () => {
                   </h2>
                   <p className="text-gray-600">{t('composer.nameYourDrink')}</p>
                 </div>
+<Card className="p-8 shadow-2xl border-2 border-[#004D40]/10 bg-white relative overflow-hidden">
+  <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF6F00]/10 rounded-bl-full -mr-10 -mt-10" />
+  
+  <div className="mb-8 text-center">
+    <label className="block text-sm font-medium text-gray-500 mb-2">
+      {t('composer.drinkName')}
+    </label>
+    <input 
+      type="text" 
+      value={drinkName}
+      onChange={(e) => setDrinkName(e.target.value)}
+      className="text-3xl font-bold text-center text-[#004D40] border-b-2 border-[#004D40]/20 focus:border-[#004D40] outline-none bg-transparent w-full max-w-md mx-auto py-2"
+    />
+    
+    {/* Badge calories */}
+    <div className="mt-4 inline-block bg-gradient-to-r from-[#FF6F00] to-[#FF8F00] text-white px-6 py-2 rounded-full shadow-lg">
+      <span className="text-sm font-semibold">
+       
+      </span>
+    </div>
+  </div>
 
-                <Card className="p-8 shadow-2xl border-2 border-[#004D40]/10 bg-white relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF6F00]/10 rounded-bl-full -mr-10 -mt-10" />
-                  
-                  <div className="mb-8 text-center">
-                    <label className="block text-sm font-medium text-gray-500 mb-2">
-                      {t('composer.drinkName')}
-                    </label>
-                    <input 
-                      type="text" 
-                      value={drinkName}
-                      onChange={(e) => setDrinkName(e.target.value)}
-                      className="text-3xl font-bold text-center text-[#004D40] border-b-2 border-[#004D40]/20 focus:border-[#004D40] outline-none bg-transparent w-full max-w-md mx-auto py-2"
-                    />
-                  </div>
+  <div className="grid md:grid-cols-2 gap-8">
+    <div>
+      <h3 className="font-bold text-[#004D40] mb-4">
+        {t('composer.composition')}
+      </h3>
+      <div className="space-y-3">
+        <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span className="font-medium">{t('composer.base')}</span>
+          <span className="text-gray-600 capitalize">
+            {t(`composer.${drinkType}`)} ({selectedSize.label})
+          </span>
+        </div>
+        {selectedIngredients.map((ing) => (
+          <div key={ing.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+            <span className="flex items-center gap-2">
+              <span>{ing.emoji}</span>
+              <span>{ing.nameKey ? t(ing.nameKey) : ing.name}</span>
+            </span>
+            <div className="text-right">
+              <div className="text-sm font-bold text-[#004D40]">
+                +{ing.price.toFixed(2)}€
+              </div>
+              <div className="text-xs text-gray-500">
+                {ing.calories} kcal
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
 
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 className="font-bold text-[#004D40] mb-4">
-                        {t('composer.composition')}
-                      </h3>
-                      <div className="space-y-3">
-                        <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                          <span className="font-medium">{t('composer.base')}</span>
-                          <span className="text-gray-600 capitalize">
-                            {t(`composer.${drinkType}`)} ({selectedSize.label})
-                          </span>
-                        </div>
-                        {selectedIngredients.map((ing) => (
-                          <div key={ing.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                            <span className="flex items-center gap-2">
-                              <span>{ing.emoji}</span>
-                              <span>{ing.nameKey ? t(ing.nameKey) : ing.name}</span>
-                            </span>
-                            <span className="text-sm font-bold text-[#004D40]">+{ing.price.toFixed(2)}€</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="font-bold text-[#004D40] mb-4">
-                        {t('composer.nutrition')}
-                      </h3>
-                      <NutritionChart ingredients={selectedIngredients} />
-                    </div>
-                  </div>
-                </Card>
+    <div>
+      <h3 className="font-bold text-[#004D40] mb-4">
+        {t('composer.nutrition')}
+      </h3>
+      <NutritionChart ingredients={selectedIngredients} />
+    </div>
+  </div>
+</Card>
 
                 {incompatibilityWarning && (
                   <Alert variant="destructive" className="bg-red-50 border-red-200">

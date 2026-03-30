@@ -345,73 +345,9 @@ export const ingredients: Ingredient[] = [
     baristaAdvice: 'Saveur intense et exotique' 
   },
 
-  // Légumes
-  { 
-    id: 'concombre', 
-    name: 'Concombre',
-    nameKey: 'ingredient.concombre',
-    emoji: '🥒', 
-    category: 'legumes', 
-    price: 0.45, 
-    calories: 16, 
-    allergens: [],
-    baristaAdvice: 'Base hydratante et rafraîchissante' 
-  },
-  { 
-    id: 'carotte', 
-    name: 'Carotte',
-    nameKey: 'ingredient.carotte',
-    emoji: '🥕', 
-    category: 'legumes', 
-    price: 0.35, 
-    calories: 41, 
-    allergens: [],
-    baristaAdvice: 'Douceur naturelle et bêta-carotène' 
-  },
-  { 
-    id: 'betterave', 
-    name: 'Betterave',
-    nameKey: 'ingredient.betterave',
-    emoji: '🟣', 
-    category: 'legumes', 
-    price: 0.65, 
-    calories: 43, 
-    allergens: [],
-    baristaAdvice: 'Couleur vibrante et énergie' 
-  },
-  { 
-    id: 'epinards', 
-    name: 'Épinards',
-    nameKey: 'ingredient.epinards',
-    emoji: '🥬', 
-    category: 'legumes', 
-    price: 0.55, 
-    calories: 23, 
-    allergens: [],
-    baristaAdvice: 'Fer et vitamines, goût neutre' 
-  },
-  { 
-    id: 'kale', 
-    name: 'Kale',
-    nameKey: 'ingredient.kale',
-    emoji: '🥬', 
-    category: 'legumes', 
-    price: 0.75, 
-    calories: 33, 
-    allergens: [],
-    baristaAdvice: 'Super-aliment riche en nutriments' 
-  },
-  { 
-    id: 'celeri', 
-    name: 'Céleri',
-    nameKey: 'ingredient.celeri',
-    emoji: '🌿', 
-    category: 'legumes', 
-    price: 0.35, 
-    calories: 16, 
-    allergens: ['celery'],
-    baristaAdvice: 'Détoxifiant et rafraîchissant' 
-  },
+ 
+ 
+ 
 
   // Superfoods
   { 
@@ -469,17 +405,7 @@ export const ingredients: Ingredient[] = [
     allergens: [],
     baristaAdvice: 'Antioxydants puissants' 
   },
-  { 
-    id: 'matcha', 
-    name: 'Matcha',
-    nameKey: 'ingredient.matcha',
-    emoji: '🍵', 
-    category: 'superfoods', 
-    price: 0.80, 
-    calories: 35, 
-    allergens: [],
-    baristaAdvice: 'Énergie zen et concentration' 
-  },
+ 
 
   // Herbes & Épices
   { 
@@ -493,17 +419,7 @@ export const ingredients: Ingredient[] = [
     allergens: [],
     baristaAdvice: 'Boost de vitamine C' 
   },
-  { 
-    id: 'gingembre', 
-    name: 'Gingembre',
-    nameKey: 'ingredient.gingembre',
-    emoji: '🍠', 
-    category: 'herbes', 
-    price: 0.45, 
-    calories: 5, 
-    allergens: [],
-    baristaAdvice: 'Puissant, allez-y doucement!' 
-  },
+ 
   { 
     id: 'curcuma', 
     name: 'Curcuma',
@@ -515,17 +431,7 @@ export const ingredients: Ingredient[] = [
     allergens: [],
     baristaAdvice: 'Anti-inflammatoire puissant, parfait pour les golden lattes' 
   },
-  { 
-    id: 'cayenne', 
-    name: 'Cayenne',
-    nameKey: 'ingredient.cayenne',
-    emoji: '🌶️', 
-    category: 'epices', 
-    price: 0.35, 
-    calories: 3, 
-    allergens: [],
-    baristaAdvice: 'Boost métabolisme, utiliser avec modération' 
-  },
+
   { 
     id: 'cannelle', 
     name: 'Cannelle',
@@ -537,17 +443,7 @@ export const ingredients: Ingredient[] = [
     allergens: [],
     baristaAdvice: 'Douceur épicée, régule la glycémie' 
   },
-  { 
-    id: 'cardamome', 
-    name: 'Cardamome',
-    nameKey: 'ingredient.cardamome',
-    emoji: '🌿', 
-    category: 'epices', 
-    price: 0.55, 
-    calories: 5, 
-    allergens: [],
-    baristaAdvice: 'Saveur exotique, parfait avec les agrumes' 
-  },
+  
   { 
     id: 'menthe', 
     name: 'Menthe',
@@ -618,6 +514,17 @@ export const ingredients: Ingredient[] = [
     allergens: ['nuts'],
     baristaAdvice: 'Léger et légèrement sucré' 
   },
+   { 
+    id: 'Lait-entier', 
+    name: 'Lait',
+    nameKey: 'ingredient.Lait',
+    emoji: '🥛', 
+    category: 'base', 
+    price: 0, 
+    calories: 50, 
+    allergens: [],
+    baristaAdvice: 'Base' 
+  },
   { 
     id: 'lait-avoine', 
     name: 'Lait d\'avoine',
@@ -636,7 +543,7 @@ export const ingredients: Ingredient[] = [
     emoji: '🥥', 
     category: 'bases', 
     price: 0.35, 
-    calories: 50, 
+    calories: 60, 
     allergens: [],
     baristaAdvice: 'Saveur tropicale' 
   },
