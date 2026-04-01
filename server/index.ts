@@ -1,28 +1,72 @@
-import express from "express";
-import { createServer } from "http";
-import path from "path";
-import { fileURLToPath } from "url";
-
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
+import { appRouter } from './routers';
+import { createContext } from './_core/context';
+import { initDatabase } from './db';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function startServer() {
-  const app = express();
-  const server = createServer(app);
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-  const staticPath = path.resolve(__dirname, "..", "dist");
+console.log('🚀 Démarrage du serveur...');
+console.log('📍 NODE_ENV:', process.env.NODE_ENV);
+console.log('📍 PORT:', PORT);
 
-app.use(express.static(staticPath));
+// Middleware
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://diy-drink-production.up.railway.app']
+    : ['http://localhost:5000', 'http://localhost:5173'],
+  credentials: true
+}));
 
-app.get("*", (_req, res) => {
-  res.sendFile(path.join(staticPath, "index.html"));
+app.use(express.json());
+app.use(cookieParser());
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Server is running',
+    env: process.env.NODE_ENV,
+    database: 'PostgreSQL'
+  });
 });
-  const port = process.env.PORT || 3000;
 
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+// tRPC API
+app.use(
+  '/api/trpc',
+  createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  })
+);
+
+// Servir le frontend en production
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.join(__dirname, '../dist');
+  console.log('📂 Serving static files from:', distPath);
+  
+  app.use(express.static(distPath));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
   });
 }
 
-startServer().catch(console.error);
+// Initialiser la base de données puis démarrer le serveur
+initDatabase().then(() => {
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+    console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
+  });
+}).catch(error => {
+  console.error('❌ Failed to start server:', error);
+  process.exit(1);
+});
