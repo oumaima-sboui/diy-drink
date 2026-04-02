@@ -5,7 +5,7 @@ import type { TrpcContext } from "./context";
 import { COOKIE_NAME } from "@shared/const";
 
 const t = initTRPC.context<TrpcContext>().create({
-  transformer: superjson,
+
 });
 
 export const router = t.router;
