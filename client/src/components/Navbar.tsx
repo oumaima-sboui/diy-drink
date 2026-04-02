@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { ChevronDown } from "lucide-react";
+import {
+  Menu,
+  X,
+  ShoppingBag,
+  User,
+  LogOut,
+  LayoutDashboard,
+  Globe,
+  ChevronDown,
+  Briefcase,
+  Shield
+} from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ShoppingBag, User, LogOut, LayoutDashboard, Globe } from 'lucide-react';
