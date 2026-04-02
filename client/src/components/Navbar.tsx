@@ -6,10 +6,9 @@ import { Menu, X, ShoppingBag, User, LogOut, LayoutDashboard, Globe } from 'luci
 import Logo from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
+DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -124,38 +123,34 @@ export default function Navbar() {
 
             {/* User Menu / Login Button */}
             {isAuthenticated && user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 text-[#004D40] hover:text-[#FF6F00] hover:bg-transparent">
-                    <User className="w-5 h-5" />
-                    <span className="hidden md:inline font-medium">
-                      {user.name?.split(' ')[0] || t('nav.myAccount')}
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col">
-                      <span className="font-medium">{user.name}</span>
-                      <span className="text-xs text-muted-foreground">{user.email}</span>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {(user.role === 'admin' || user.role === 'worker') && (
-                    <>
-                      <DropdownMenuItem onClick={() => setLocation(getDashboardLink())}>
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        {user.role === 'admin' ? t('nav.admin') : t('nav.dashboard')}
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                    </>
-                  )}
-                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    {t('nav.logout')}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="ghost" className="flex items-center gap-2">
+      <User className="h-5 w-5" />
+      <span className="hidden md:inline">{user.name}</span>
+      <ChevronDown className="h-4 w-4" />
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end" className="w-48">
+    {user.role === 'worker' && (
+      <DropdownMenuItem onClick={() => setLocation('/workers')}>
+        <Briefcase className="mr-2 h-4 w-4" />
+        {t('navbar.workersPanel')}
+      </DropdownMenuItem>
+    )}
+    {user.role === 'admin' && (
+      <DropdownMenuItem onClick={() => setLocation('/admin')}>
+        <Shield className="mr-2 h-4 w-4" />
+        {t('navbar.adminPanel')}
+      </DropdownMenuItem>
+    )}
+    <DropdownMenuSeparator />
+    <DropdownMenuItem onClick={handleLogout}>
+      <LogOut className="mr-2 h-4 w-4" />
+      {t('navbar.logout')}
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
             ) : (
               <Button 
                 variant="ghost" 

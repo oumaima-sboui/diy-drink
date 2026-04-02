@@ -139,6 +139,7 @@ export default function Panier() {
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-[#FAF8F3] botanical-pattern pt-28">
+         <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '0 1rem' }}>
         <header className="bg-white border-b-2 border-[#E5E5E5]">
           <div className="container mx-auto px-4 max-w-4xl">
             <Button variant="ghost" className="text-[#004D40]" asChild>
@@ -163,6 +164,7 @@ export default function Panier() {
           </Button>
         </div>
       </div>
+    </div>
     );
   }
 
