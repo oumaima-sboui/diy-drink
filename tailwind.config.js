@@ -1,19 +1,18 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from "tailwindcss"
+
 export default {
-  darkMode: ["class"],
   content: [
-    './index.html',
-    './client/**/*.{ts,tsx,js,jsx}',
+    "./index.html",
+    "./client/src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
+      colors: {
+        border: "hsl(var(--border))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
       },
-      colors: {}
-    }
+    },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [],
+} satisfies Config
