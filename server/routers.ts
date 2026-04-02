@@ -1,4 +1,5 @@
-import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
+const COOKIE_NAME = 'diy-drink-session';
+const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router, protectedProcedure } from "./_core/trpc";

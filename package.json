@@ -43,6 +43,7 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5",
     "sonner": "^1.4.0",
+    "superjson": "^2.2.6",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "wouter": "^3.0.0",
