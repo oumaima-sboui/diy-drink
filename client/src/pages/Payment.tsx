@@ -198,7 +198,7 @@ export default function Payment() {
   if (paymentSuccess) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6 pt-28">
-        <Card className="max-w-md w-full text-center">
+        <Card className="container mx-auto px-4 max-w-4xl">
           <CardContent className="p-8">
             <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4 animate-pulse" />
             <h2 className="text-2xl font-bold text-primary mb-2">{t('payment.success')}</h2>
