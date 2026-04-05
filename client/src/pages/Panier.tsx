@@ -175,7 +175,8 @@ export default function Panier() {
   return (
     <div className="min-h-screen bg-[#FAF8F3] botanical-pattern pt-28">
       <header className="bg-white border-b-2 border-[#E5E5E5]">
-        <div className="container py-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 max-w-4xl">
+      
           <Button variant="ghost" className="text-[#004D40]" asChild>
             <Link href="/">
               <ArrowLeft className="mr-2 h-4 w-4" />

@@ -1,33 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import {
-  Menu,
-  X,
-  ShoppingBag,
-  User,
-  LogOut,
-  LayoutDashboard,
-  Globe,
-  ChevronDown,
-  Briefcase,
-  Shield
+import { 
+  Menu, 
+  X, 
+  ShoppingBag, 
+  User, 
+  LogOut, 
+  LayoutDashboard, 
+  Globe, 
+  ChevronDown, 
+  Briefcase, 
+  Shield 
 } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ShoppingBag, User, LogOut, LayoutDashboard, Globe } from 'lucide-react';
-import Logo from '@/components/Logo';
-import { Button } from '@/components/ui/button';
-import {
-DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
-import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/_core/hooks/useAuth';
-import { toast } from 'sonner';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();

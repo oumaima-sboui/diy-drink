@@ -175,7 +175,7 @@ export default function Workers() {
                       <TableRow key={order.id}>
                         <TableCell className="font-medium">{order.orderNumber}</TableCell>
                         <TableCell className="font-semibold text-lg">
-                          {order.totalAmount.toFixed(2)}€
+                          {parseFloat(order.totalAmount).toFixed(2)}€
                         </TableCell>
                         <TableCell>
                           <Select
