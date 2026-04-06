@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '@/contexts/CartContext';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
