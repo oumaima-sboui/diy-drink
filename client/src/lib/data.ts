@@ -1,9 +1,20 @@
 import type { Ingredient, CoffeeItem, Size, ClassicDrink } from './types';
 
 export const sizes: Size[] = [
- 
-  { id: 'medium', label: 'Moyen', multiplier: 1.3 },
-  { id: 'large', label: 'Large', multiplier: 1.6 },
+  { 
+    id: 'medium', 
+    label: 'Moyen', 
+    volume: '400ml',
+    multiplier: 1,
+    maxFlavors: 3  
+  },
+  { 
+    id: 'large', 
+    label: 'Large', 
+    volume: '500ml',
+    multiplier: 1.3,
+    maxFlavors: 4  
+  }
 ];
 
 export const allergens = {
@@ -744,3 +755,10 @@ export const extraOptions = [
   { id: 'creme-fouettee', label: 'Crème fouettée', price: 0.70 },
   { id: 'chocolat', label: 'Poudre de chocolat', price: 0.40 },
 ];
+export interface Size {
+  id: 'medium' | 'large';
+  label: string;
+  volume: string;
+  multiplier: number;
+  maxFlavors: number;  
+}

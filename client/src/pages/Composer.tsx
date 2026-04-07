@@ -72,22 +72,32 @@ export default function Composer() {
     }
   }, [selectedIngredients, t]);
   
-  const toggleIngredient = (ingredient: Ingredient) => {
-    if (selectedIngredients.find(i => i.id === ingredient.id)) {
-      setSelectedIngredients(selectedIngredients.filter(i => i.id !== ingredient.id));
-    } else {
-      setSelectedIngredients([...selectedIngredients, ingredient]);
+ const toggleIngredient = (ingredient: Ingredient) => {
+  const isAlreadySelected = selectedIngredients.find(i => i.id === ingredient.id);
+  
+  if (isAlreadySelected) {
+    // Retirer l'ingrédient
+    setSelectedIngredients(selectedIngredients.filter(i => i.id !== ingredient.id));
+  } else {
+    // Vérifier la limite pour les fruits (étape 2)
+    if (currentStep === 2 && ingredient.category === 'fruits') {
+      if (!canAddMoreFlavors(2)) {
+        toast.error(`Maximum ${selectedSize.maxFlavors} saveurs pour la taille ${selectedSize.label}`);
+        return;
+      }
     }
-  };
-
+    
+    setSelectedIngredients([...selectedIngredients, ingredient]);
+  }
+};
 
   const calculateTotal = () => {
   let basePrice = 0;
   
   if (drinkType === 'jus') {
-    basePrice = selectedSize === 'medium' ? 7.99 : 8.99;
+   basePrice = selectedSize.id === 'medium' ? 6.99 : 7.99;
   } else {
-    basePrice = selectedSize === 'medium' ? 8.99 : 9.99;
+    basePrice = selectedSize.id === 'medium' ? 6.99 : 7.99;
   }
   
   // Les ingrédients du composer sont INCLUS dans le prix de base
@@ -157,20 +167,44 @@ const getIngredientsForStep = () => {
       );
       break;
     case 3:
-      // Filtrer selon le type de boisson ET dédoublonner par ID
-      filteredIngredients = ingredients.filter(i => {
-        if (!['superfoods', 'epices', 'herbes', 'proteines'].includes(i.category)) {
-          return false;
-        }
-        
-        // Vérifier la compatibilité avec le type de boisson
-        if (drinkType === 'jus') {
-          return i.forJuice !== false;
-        } else {
-          return i.forSmoothie !== false;
-        }
-      });
-      break;
+  // Récupérer les catégories des ingrédients déjà sélectionnés
+  const selectedCategories = selectedIngredients.map(i => i.category);
+  const hasFruits = selectedCategories.includes('fruits');
+  const hasLegumes = selectedCategories.includes('legumes');
+  const hasBases = selectedCategories.includes('bases');
+  
+  filteredIngredients = ingredients.filter(i => {
+    if (!['superfoods', 'epices', 'herbes', 'proteines'].includes(i.category)) {
+      return false;
+    }
+    
+    // Vérifier la compatibilité avec le type de boisson
+    if (drinkType === 'jus') {
+      if (i.forJuice === false) return false;
+    } else {
+      if (i.forSmoothie === false) return false;
+    }
+    
+    // LOGIQUE DE FILTRAGE INTELLIGENTE
+    // Si on a des fruits, on propose des boosters compatibles fruits
+    // Si on a des légumes verts, on propose gingembre, spiruline, etc.
+    
+    // Boosters toujours compatibles
+    const alwaysCompatible = ['spiruline', 'gingembre', 'curcuma', 'matcha'];
+    if (alwaysCompatible.includes(i.id)) return true;
+    
+    // Si jus de fruits : proposer herbes fraîches
+    if (hasFruits && ['menthe', 'basilic'].includes(i.id)) return true;
+    
+    // Si smoothie : proposer protéines
+    if (drinkType === 'smoothie' && i.category === 'proteines') return true;
+    
+    // Si légumes verts : proposer citron, gingembre
+    if (hasLegumes && ['citron', 'gingembre'].includes(i.id)) return true;
+    
+    return true; // Par défaut, afficher
+  });
+  break;
     default:
       filteredIngredients = [];
   }
@@ -225,7 +259,16 @@ const getIngredientsForStep = () => {
   const handleStaySimple = () => {
     setShowWelcomeDialog(false);
   };
-
+const canAddMoreFlavors = (currentStep: number) => {
+  if (currentStep !== 2) return true; // Pas d'étape saveurs
+  
+  const maxFlavors = selectedSize.maxFlavors;
+  const currentFlavorsCount = selectedIngredients.filter(
+    ing => ing.category === 'fruits'
+  ).length;
+  
+  return currentFlavorsCount < maxFlavors;
+};
   return (
     <div className="min-h-screen bg-[#FAF8F3] pb-20 pt-28">
       {/* Pop-up d'accueil DUO */}
@@ -449,7 +492,13 @@ const getIngredientsForStep = () => {
                     ))}
                   </div>
                 )}
-
+{currentStep === 2 && (
+  <div className="text-center mb-4">
+    <span className="inline-block bg-[#FF6F00] text-white px-4 py-2 rounded-full text-sm font-bold">
+      {selectedIngredients.filter(i => i.category === 'fruits').length} / {selectedSize.maxFlavors} saveurs
+    </span>
+  </div>
+)}
                 {/* Grille d'ingrédients */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {getIngredientsForStep().map((ingredient) => {
