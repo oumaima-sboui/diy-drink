@@ -56,7 +56,7 @@ const resources = {
       "home.reason1Title": "Zéro Compromis",
       "home.reason1Desc": "Pas de sucres ajoutés, pas de conservateurs, que du naturel.",
       
-      "home.reason2Title": "Adapté à VOS Besoins",
+      "home.reason2Title": "Adapté à vos Besoins",
       "home.reason2Desc": "Sport, détox, énergie, récupération... Vous créez selon vos objectifs.",
       
       "home.reason3Title": "Transparent & Traçable",
@@ -173,6 +173,9 @@ const resources = {
       "combo.orangeStrawberry": "Orange / Fraise",
       "combo.pineappleMintLemon": "Ananas / Menthe-Citron",
       "combo.appleKiwi": "Pomme / Kiwi",
+        "duo.pineappleMint": "Ananas / Menthe",
+  "duo.strawberryBanana": "Fraise / Banane",
+  "duo.orangeCarrot": "Orange / Carotte",
 
 // Composer
       "composer.title": "Créer ma boisson",
@@ -181,7 +184,7 @@ const resources = {
       "composer.step2": "Les Saveurs",
       "composer.step3": "Les Boosters",
       "composer.step4": "La Signature",
-      "composer.step1Desc": "Choisissez la base liquide ou les légumes fondateurs de votre boisson.",
+      "composer.step1Desc": "Choisissez la base liquide fondateurs de votre boisson.",
       "composer.step2Desc": "Ajoutez du goût et des vitamines avec nos fruits frais.",
       "composer.step3Desc": "Boostez votre santé avec nos super-aliments et épices.",
       "composer.masterpiece": "Votre Chef-d'œuvre",
@@ -921,7 +924,7 @@ const resources = {
       "composer.step2": "The Flavors",
       "composer.step3": "The Boosters",
       "composer.step4": "The Signature",
-      "composer.step1Desc": "Choose the liquid base or founding vegetables for your drink.",
+      "composer.step1Desc": "Choose the liquid base for your drink.",
       "composer.step2Desc": "Add taste and vitamins with our fresh fruits.",
       "composer.step3Desc": "Boost your health with our superfoods and spices.",
       "composer.masterpiece": "Your Masterpiece",
@@ -1221,7 +1224,9 @@ const resources = {
       "combo.orangeStrawberry": "Orange / Strawberry",
       "combo.pineappleMintLemon": "Pineapple / Mint-Lemon",
       "combo.appleKiwi": "Apple / Kiwi",
-
+ "duo.pineappleMint": "Pineapple / Mint",
+  "duo.strawberryBanana": "Strawberry / Banana",
+  "duo.orangeCarrot": "Orange / Carrot",
       // Add-ons
       "addon.wheyProtein": "Whey Protein (vanilla)",
       "addon.wheyProteinDesc": "Muscle recovery",
@@ -1276,7 +1281,7 @@ const resources = {
       "home.reason1Title": "Zero Compromise",
       "home.reason1Desc": "No added sugars, no preservatives, only natural.",
       
-      "home.reason2Title": "Adapted to YOUR Needs",
+      "home.reason2Title": "Adapted to your Needs",
       "home.reason2Desc": "Sport, detox, energy, recovery... Create based on your goals.",
       
       "home.reason3Title": "Transparent & Traceable",
@@ -1379,7 +1384,7 @@ const resources = {
       "home.reason1Title": "Null Kompromisse",
       "home.reason1Desc": "Kein zugesetzter Zucker, keine Konservierungsstoffe, nur natürlich.",
       
-      "home.reason2Title": "An DEINE Bedürfnisse Angepasst",
+      "home.reason2Title": "An deine Bedürfnisse Angepasst",
       "home.reason2Desc": "Sport, Detox, Energie, Erholung... Kreiere nach deinen Zielen.",
       
       "home.reason3Title": "Transparent & Nachverfolgbar",
@@ -1445,6 +1450,9 @@ const resources = {
       "combo.orangeStrawberry": "Orange / Erdbeere",
       "combo.pineappleMintLemon": "Ananas / Minze-Zitrone",
       "combo.appleKiwi": "Apfel / Kiwi",
+        "duo.pineappleMint": "Ananas / Minze",
+  "duo.strawberryBanana": "Erdbeere / Banane",
+  "duo.orangeCarrot": "Orange / Karotte",
 // Menu - Namensänderungen
       "menu.coffeeTea": "Kaffee & Tee",
       "menu.waterSodas": "Wasser & Limonaden",
@@ -1729,7 +1737,7 @@ const resources = {
       "composer.step2": "Die Aromen",
       "composer.step3": "Die Booster",
       "composer.step4": "Die Signatur",
-      "composer.step1Desc": "Wählen Sie die flüssige Basis oder das Gründungsgemüse für Ihr Getränk.",
+      "composer.step1Desc": "Wählen Sie die flüssige Basis für Ihr Getränk.",
       "composer.step2Desc": "Fügen Sie Geschmack und Vitamine mit unseren frischen Früchten hinzu.",
       "composer.step3Desc": "Steigern Sie Ihre Gesundheit mit unseren Superfoods und Gewürzen.",
       "composer.masterpiece": "Ihr Meisterwerk",

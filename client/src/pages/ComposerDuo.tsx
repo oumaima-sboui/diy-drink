@@ -62,26 +62,45 @@ export default function ComposerDuo() {
     price: 9.99,
   },
   // NOUVEAUX COMBOS
-  {
-    id: 'combo-fraise-banane',
-    name: 'Berry Smoothness',
-    fruits: ['Fraise', 'Banane'],
-    image: '/images/duo-fraise-banane.png',
-    price: 9.99,
+ {
+    id: 'mango-orange',
+    nameKey: 'duo.MangoOrange',
+    side1: 'Mangue',
+    side2: 'Orange',
+    side1Image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400',
+    side2Image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400',
+    color: 'from-yellow-400 to-orange-500',
+    price: 9.99
   },
   {
-    id: 'combo-orange-carotte',
-    name: 'Vitamin Boost',
-    fruits: ['Orange', 'Carotte'],
-    image: '/images/duo-orange-carotte.png',
-    price: 9.99,
+    id: 'pineapple-mint',
+    nameKey: 'duo.PineappleMint',
+    side1: 'Ananas',
+    side2: 'Menthe-Citron',
+    side1Image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400',
+    side2Image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=400',
+    color: 'from-yellow-300 to-green-400',
+    price: 9.99
+  },
+ {
+    id: 'strawberry-banana',
+    nameKey: 'duo.StrawberryBanana',
+    side1: 'Fraise',
+    side2: 'Banane',
+    side1Image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400',
+    side2Image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400',
+    color: 'from-pink-400 to-yellow-300',
+    price: 9.99
   },
   {
-    id: 'combo-citron-gingembre',
-    name: 'Detox Power',
-    fruits: ['Citron', 'Gingembre'],
-    image: '/images/duo-citron-gingembre.png',
-    price: 9.99,
+    id: 'orange-carrot',
+    nameKey: 'duo.OrangeCarrot',
+    side1: 'Orange',
+    side2: 'Carotte',
+    side1Image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400',
+    side2Image: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400',
+    color: 'from-orange-500 to-orange-600',
+    price: 9.99
   },
 
     {
@@ -118,7 +137,6 @@ export default function ComposerDuo() {
 
   const AVAILABLE_FRUITS: Fruit[] = [
     { id: 'mangue', name: 'Mangue', nameKey: 'ingredient.mangue', image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400', color: 'from-yellow-400 to-orange-400' },
-    { id: 'passion', name: 'Fruit de la passion', nameKey: 'ingredient.passion', image: 'https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?w=400', color: 'from-purple-400 to-pink-500' },
     { id: 'orange', name: 'Orange', nameKey: 'ingredient.orange', image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400', color: 'from-orange-500 to-orange-600' },
     { id: 'fraise', name: 'Fraise', nameKey: 'ingredient.fraise', image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400', color: 'from-red-400 to-pink-500' },
     { id: 'ananas', name: 'Ananas', nameKey: 'ingredient.ananas', image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400', color: 'from-yellow-300 to-yellow-500' },
