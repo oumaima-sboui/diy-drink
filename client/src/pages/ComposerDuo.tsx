@@ -39,16 +39,51 @@ export default function ComposerDuo() {
   const [customFruit2, setCustomFruit2] = useState<Fruit | null>(null);
 
   const POPULAR_COMBOS: DuoCombo[] = [
-    {
-      id: 'mango-passion',
-      nameKey: 'combo.mangoPassion',
-      side1: 'Mangue',
-      side2: 'Fruit de la passion',
-      side1Image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400',
-      side2Image: 'https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?w=400',
-      color: 'from-yellow-400 to-orange-500',
-      price: 9.99
-    },
+ 
+  {
+    id: 'combo-mangue-orange',
+    name: 'Tropical Sunrise',
+    fruits: ['Mangue', 'Orange'],
+    image: '/images/duo-mangue-orange.png',
+    price: 9.99,
+  },
+  {
+    id: 'combo-ananas-menthe',
+    name: 'Fresh Tropics',
+    fruits: ['Ananas', 'Menthe-Citron'],
+    image: '/images/duo-ananas-menthe.png',
+    price: 9.99,
+  },
+  {
+    id: 'combo-pomme-kiwi',
+    name: 'Green Energy',
+    fruits: ['Pomme', 'Kiwi'],
+    image: '/images/duo-pomme-kiwi.png',
+    price: 9.99,
+  },
+  // NOUVEAUX COMBOS
+  {
+    id: 'combo-fraise-banane',
+    name: 'Berry Smoothness',
+    fruits: ['Fraise', 'Banane'],
+    image: '/images/duo-fraise-banane.png',
+    price: 9.99,
+  },
+  {
+    id: 'combo-orange-carotte',
+    name: 'Vitamin Boost',
+    fruits: ['Orange', 'Carotte'],
+    image: '/images/duo-orange-carotte.png',
+    price: 9.99,
+  },
+  {
+    id: 'combo-citron-gingembre',
+    name: 'Detox Power',
+    fruits: ['Citron', 'Gingembre'],
+    image: '/images/duo-citron-gingembre.png',
+    price: 9.99,
+  },
+
     {
       id: 'orange-strawberry',
       nameKey: 'combo.orangeStrawberry',

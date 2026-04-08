@@ -14,6 +14,7 @@ import { generateDrinkName, calculateTotalCalories } from '@/lib/nutrition';
 import Logo from '@/components/Logo';
 import NutritionChart from '@/components/NutritionChart';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getCompatibleBoosters, incompatibleCombos } from '@/lib/boosterCompatibility';
 import {
   Dialog,
   DialogContent,
@@ -72,16 +73,28 @@ export default function Composer() {
     }
   }, [selectedIngredients, t]);
   
- const toggleIngredient = (ingredient: Ingredient) => {
+const toggleIngredient = (ingredient: Ingredient) => {
   const isAlreadySelected = selectedIngredients.find(i => i.id === ingredient.id);
   
   if (isAlreadySelected) {
     // Retirer l'ingrédient
     setSelectedIngredients(selectedIngredients.filter(i => i.id !== ingredient.id));
   } else {
-    // Vérifier la limite pour les fruits (étape 2)
+    // ÉTAPE 1 : Limiter à 1 base
+    if (currentStep === 1) {
+      const bases = selectedIngredients.filter(i => i.category === 'bases' || i.category === 'legumes');
+      
+      if (bases.length >= 1) {
+        toast.error(t('composer.onlyOneBase', 'Vous ne pouvez choisir qu\'une seule base'));
+        return;
+      }
+    }
+    
+    // ÉTAPE 2 : Limiter selon la taille
     if (currentStep === 2 && ingredient.category === 'fruits') {
-      if (!canAddMoreFlavors(2)) {
+      const currentFlavorsCount = selectedIngredients.filter(i => i.category === 'fruits').length;
+      
+      if (currentFlavorsCount >= selectedSize.maxFlavors) {
         toast.error(`Maximum ${selectedSize.maxFlavors} saveurs pour la taille ${selectedSize.label}`);
         return;
       }
@@ -166,12 +179,9 @@ const getIngredientsForStep = () => {
         i.category === 'fruits' || (drinkType === 'smoothie' && i.category === 'legumes')
       );
       break;
-    case 3:
-  // Récupérer les catégories des ingrédients déjà sélectionnés
-  const selectedCategories = selectedIngredients.map(i => i.category);
-  const hasFruits = selectedCategories.includes('fruits');
-  const hasLegumes = selectedCategories.includes('legumes');
-  const hasBases = selectedCategories.includes('bases');
+case 3:
+  // Récupérer les boosters compatibles avec les ingrédients sélectionnés
+  const compatibleBoosterIds = getCompatibleBoosters(selectedIngredients);
   
   filteredIngredients = ingredients.filter(i => {
     if (!['superfoods', 'epices', 'herbes', 'proteines'].includes(i.category)) {
@@ -185,25 +195,15 @@ const getIngredientsForStep = () => {
       if (i.forSmoothie === false) return false;
     }
     
-    // LOGIQUE DE FILTRAGE INTELLIGENTE
-    // Si on a des fruits, on propose des boosters compatibles fruits
-    // Si on a des légumes verts, on propose gingembre, spiruline, etc.
-    
-    // Boosters toujours compatibles
-    const alwaysCompatible = ['spiruline', 'gingembre', 'curcuma', 'matcha'];
-    if (alwaysCompatible.includes(i.id)) return true;
-    
-    // Si jus de fruits : proposer herbes fraîches
-    if (hasFruits && ['menthe', 'basilic'].includes(i.id)) return true;
-    
-    // Si smoothie : proposer protéines
-    if (drinkType === 'smoothie' && i.category === 'proteines') return true;
-    
-    // Si légumes verts : proposer citron, gingembre
-    if (hasLegumes && ['citron', 'gingembre'].includes(i.id)) return true;
-    
-    return true; // Par défaut, afficher
+    return true;
   });
+  
+  // Marquer les boosters comme disponibles ou non
+  filteredIngredients = filteredIngredients.map(booster => ({
+    ...booster,
+    isCompatible: compatibleBoosterIds.includes(booster.id)
+  }));
+  
   break;
     default:
       filteredIngredients = [];
@@ -501,41 +501,55 @@ const canAddMoreFlavors = (currentStep: number) => {
 )}
                 {/* Grille d'ingrédients */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {getIngredientsForStep().map((ingredient) => {
-                    const isSelected = selectedIngredients.some(i => i.id === ingredient.id);
-                    return (
-                      <motion.button
-                        key={ingredient.id}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => toggleIngredient(ingredient)}
-                        className={`relative p-4 rounded-xl border-2 transition-all text-left group ${
-                          isSelected
-                            ? 'border-[#FF6F00] bg-[#FF6F00]/5 shadow-md'
-                            : 'border-gray-100 hover:border-[#FF6F00]/30 bg-white hover:shadow-sm'
-                        }`}
-                      >
-                        {isSelected && (
-                          <div className="absolute top-2 right-2 bg-[#FF6F00] text-white rounded-full p-1">
-                            <Check className="w-3 h-3" />
-                          </div>
-                        )}
-                        <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
-                          {ingredient.emoji}
-                        </div>
-                        <div className="font-bold text-[#004D40] mb-1">
-                          {ingredient.nameKey ? t(ingredient.nameKey) : ingredient.name}
-                        </div>
-                        <div className="text-sm text-[#FF6F00] font-medium">+{ingredient.price.toFixed(2)}€</div>
-                        
-                        {ingredient.calories < 30 && (
-                          <span className="text-[10px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded-full mt-2 inline-block">
-                            Light
-                          </span>
-                        )}
-                      </motion.button>
-                    );
-                  })}
+                 {getIngredientsForStep().map((ingredient) => {
+  const isSelected = selectedIngredients.some(i => i.id === ingredient.id);
+  const isCompatible = ingredient.isCompatible !== false; // Par défaut compatible
+  
+  return (
+    <motion.button
+      key={ingredient.id}
+      whileHover={{ scale: isCompatible ? 1.05 : 1 }}
+      whileTap={{ scale: isCompatible ? 0.95 : 1 }}
+      onClick={() => isCompatible && toggleIngredient(ingredient)}
+      disabled={!isCompatible}
+      className={`relative p-4 rounded-xl border-2 transition-all text-left group ${
+        !isCompatible
+          ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-300'
+          : isSelected
+          ? 'border-[#FF6F00] bg-[#FF6F00]/5 shadow-md'
+          : 'border-gray-100 hover:border-[#FF6F00]/30 bg-white hover:shadow-sm'
+      }`}
+    >
+      {!isCompatible && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded-xl z-10">
+          <span className="text-2xl">🚫</span>
+        </div>
+      )}
+      
+      {isSelected && isCompatible && (
+        <div className="absolute top-2 right-2 bg-[#FF6F00] text-white rounded-full p-1 z-20">
+          <Check className="w-3 h-3" />
+        </div>
+      )}
+      
+      <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
+        {ingredient.emoji}
+      </div>
+      <div className="font-bold text-[#004D40] mb-1">
+        {ingredient.nameKey ? t(ingredient.nameKey) : ingredient.name}
+      </div>
+      <div className="text-sm text-[#FF6F00] font-medium">
+        +{ingredient.price.toFixed(2)}€
+      </div>
+      
+      {!isCompatible && (
+        <div className="mt-2 text-xs text-red-600 font-medium">
+          Incompatible
+        </div>
+      )}
+    </motion.button>
+  );
+})}
                 </div>
               </div>
             )}
