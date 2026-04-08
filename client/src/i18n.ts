@@ -173,9 +173,9 @@ const resources = {
       "combo.orangeStrawberry": "Orange / Fraise",
       "combo.pineappleMintLemon": "Ananas / Menthe-Citron",
       "combo.appleKiwi": "Pomme / Kiwi",
-        "duo.pineappleMint": "Ananas / Menthe",
-  "duo.strawberryBanana": "Fraise / Banane",
-  "duo.orangeCarrot": "Orange / Carotte",
+        "combo.pineappleMint": "Ananas / Menthe",
+  "combo.strawberryBanana": "Fraise / Banane",
+  "combo.orangeCarrot": "Orange / Carotte",
 
 // Composer
       "composer.title": "Créer ma boisson",
@@ -1224,9 +1224,9 @@ const resources = {
       "combo.orangeStrawberry": "Orange / Strawberry",
       "combo.pineappleMintLemon": "Pineapple / Mint-Lemon",
       "combo.appleKiwi": "Apple / Kiwi",
- "duo.pineappleMint": "Pineapple / Mint",
-  "duo.strawberryBanana": "Strawberry / Banana",
-  "duo.orangeCarrot": "Orange / Carrot",
+ "combo.pineappleMint": "Pineapple / Mint",
+  "combo.strawberryBanana": "Strawberry / Banana",
+  "combo.orangeCarrot": "Orange / Carrot",
       // Add-ons
       "addon.wheyProtein": "Whey Protein (vanilla)",
       "addon.wheyProteinDesc": "Muscle recovery",
@@ -1450,9 +1450,9 @@ const resources = {
       "combo.orangeStrawberry": "Orange / Erdbeere",
       "combo.pineappleMintLemon": "Ananas / Minze-Zitrone",
       "combo.appleKiwi": "Apfel / Kiwi",
-        "duo.pineappleMint": "Ananas / Minze",
-  "duo.strawberryBanana": "Erdbeere / Banane",
-  "duo.orangeCarrot": "Orange / Karotte",
+        "combo.pineappleMint": "Ananas / Minze",
+  "combo.strawberryBanana": "Erdbeere / Banane",
+  "combo.orangeCarrot": "Orange / Karotte",
 // Menu - Namensänderungen
       "menu.coffeeTea": "Kaffee & Tee",
       "menu.waterSodas": "Wasser & Limonaden",

@@ -20,7 +20,12 @@ export default function Panier() {
   const getTotalItems = () => {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   };
-
+console.log({
+  getTotalPrice,
+  getItemTotalPrice,
+  removeFromCart,
+  updateQuantity
+});
   useEffect(() => {
     if (showWarningDialog && cart.length > 0) {
       let allWarnings: TasteWarning[] = [];
@@ -168,7 +173,9 @@ export default function Panier() {
     );
   }
 
-  const subtotal = getTotalPrice();
+const subtotal = typeof getTotalPrice === 'function'
+  ? getTotalPrice()
+  : 0;
   const tax = subtotal * 0.03;
   const total = subtotal + tax;
 

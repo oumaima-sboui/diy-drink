@@ -40,41 +40,20 @@ export default function ComposerDuo() {
 
   const POPULAR_COMBOS: DuoCombo[] = [
  
-  {
-    id: 'combo-mangue-orange',
-    name: 'Tropical Sunrise',
-    fruits: ['Mangue', 'Orange'],
-    image: '/images/duo-mangue-orange.png',
-    price: 9.99,
-  },
-  {
-    id: 'combo-ananas-menthe',
-    name: 'Fresh Tropics',
-    fruits: ['Ananas', 'Menthe-Citron'],
-    image: '/images/duo-ananas-menthe.png',
-    price: 9.99,
-  },
-  {
-    id: 'combo-pomme-kiwi',
-    name: 'Green Energy',
-    fruits: ['Pomme', 'Kiwi'],
-    image: '/images/duo-pomme-kiwi.png',
-    price: 9.99,
-  },
-  // NOUVEAUX COMBOS
+
  {
     id: 'mango-orange',
-    nameKey: 'duo.MangoOrange',
+    nameKey: 'combo.MangoOrange',
     side1: 'Mangue',
     side2: 'Orange',
-    side1Image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400',
+    side1Image: 'https://images.unsplash.com/photo-1605027990121-cbae9c8c6c8d?w=400',
     side2Image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400',
     color: 'from-yellow-400 to-orange-500',
     price: 9.99
   },
   {
     id: 'pineapple-mint',
-    nameKey: 'duo.PineappleMint',
+    nameKey: 'combo.PineappleMint',
     side1: 'Ananas',
     side2: 'Menthe-Citron',
     side1Image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400',
@@ -84,7 +63,7 @@ export default function ComposerDuo() {
   },
  {
     id: 'strawberry-banana',
-    nameKey: 'duo.StrawberryBanana',
+    nameKey: 'combo.StrawberryBanana',
     side1: 'Fraise',
     side2: 'Banane',
     side1Image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400',
@@ -94,7 +73,7 @@ export default function ComposerDuo() {
   },
   {
     id: 'orange-carrot',
-    nameKey: 'duo.OrangeCarrot',
+    nameKey: 'combo.OrangeCarrot',
     side1: 'Orange',
     side2: 'Carotte',
     side1Image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400',
