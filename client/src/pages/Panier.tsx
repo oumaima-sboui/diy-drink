@@ -168,17 +168,14 @@ export default function Panier() {
     );
   }
 
-const subtotal = typeof getTotalPrice === 'function'
-  ? getTotalPrice()
-  : 0;
+  const subtotal = getTotalPrice();
   const tax = subtotal * 0.03;
   const total = subtotal + tax;
 
   return (
-  <div className="mx-auto px-4 max-w-4xl w-fulll">
     <div className="min-h-screen bg-[#FAF8F3] botanical-pattern pt-28">
       <header className="bg-white border-b-2 border-[#E5E5E5]">
-        
+        <div className="container mx-auto px-4 max-w-4xl">
       
           <Button variant="ghost" className="text-[#004D40]" asChild>
             <Link href="/">
@@ -190,9 +187,9 @@ const subtotal = typeof getTotalPrice === 'function'
             {t('cart.title')} ({getTotalItems()})
           </h1>
           <div className="w-24"></div>
-       
+        </div>
       </header>
- </div>
+
       <div className="container py-8 max-w-4xl">
         <div className="space-y-4 mb-8">
           {cart.map((item) => {
