@@ -14,5 +14,7 @@ export default defineConfig({
   build: {
     outDir: "../dist",
     emptyOutDir: true,
+     minify: false, // ← DÉSACTIVER LA MINIFICATION TEMPORAIREMENT
+    sourcemap: true, // ← ACTIVER LES SOURCE MAPS
   },
 });
