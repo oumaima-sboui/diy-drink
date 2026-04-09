@@ -175,7 +175,7 @@ export default function Panier() {
   return (
     <div className="min-h-screen bg-[#FAF8F3] botanical-pattern pt-28">
       <header className="bg-white border-b-2 border-[#E5E5E5]">
-        <div className="mx-auto px-4 max-w-4xl w-full">
+        <div className="container mx-auto px-4 max-w-4xl">
       
           <Button variant="ghost" className="text-[#004D40]" asChild>
             <Link href="/">

@@ -11,19 +11,8 @@ export default defineConfig({
       "@shared": path.resolve(__dirname, "shared"),
     },
   },
-  server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-      },
-    },
-  },
   build: {
     outDir: "../dist",
     emptyOutDir: true,
-     minify: false, // ← DÉSACTIVER LA MINIFICATION TEMPORAIREMENT
-    sourcemap: true, // ← ACTIVER LES SOURCE MAPS
   },
 });
