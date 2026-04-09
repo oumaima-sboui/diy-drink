@@ -858,7 +858,7 @@ const resources = {
       "menu.cafeCreme": "Café Crème",
       "menu.cafeCremeDesc": "Smooth espresso with a touch of cream.",
       "menu.ristretto": "Ristretto",
-      "menu.ristrettoDesc": "Short,concentrated espresso, intense flavor.",
+      "menu.ristrettoDesc": "Short, concentrated espresso, intense flavor.",
       "menu.cappuccino": "Cappuccino",
       "menu.cappuccinoDesc": "Espresso, steamed milk and smooth foam.",
       "menu.laitRusse": "Russian Milk Coffee",
