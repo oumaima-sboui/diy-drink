@@ -14,11 +14,11 @@ import { generateDrinkName, calculateTotalCalories } from '@/lib/nutrition';
 import Logo from '@/components/Logo';
 import NutritionChart from '@/components/NutritionChart';
 import { motion, AnimatePresence } from 'framer-motion';
-<<<<<<< HEAD
-//import { getCompatibleBoosters, incompatibleCombos } from '@/lib/boosterCompatibility';
-=======
+
 import { getCompatibleBoosters, incompatibleCombos } from '@/lib/boosterCompatibility';
->>>>>>> 5a9ba01 (Fix: rebuid new)
+
+import { getCompatibleBoosters, incompatibleCombos } from '@/lib/boosterCompatibility';
+
 import {
   Dialog,
   DialogContent,
@@ -138,21 +138,17 @@ const toggleIngredient = (ingredient: Ingredient) => {
       return;
     }
     
-    addToCart({
+ addToCart({
       id: `${drinkType}-${Date.now()}`,
       type: drinkType,
       size: selectedSize.id,
       basePrice: calculateTotal(),
       ingredients: selectedIngredients,
-<<<<<<< HEAD
       quantity: 1,
       customizations: {
       productName: drinkName, 
       description: selectedIngredients.map(i => i.name).join(', ')
     }
-=======
-      quantity: 1
->>>>>>> 5a9ba01 (Fix: rebuid new)
     });
     
     toast.success(t('composer.addedToCart', 'Ajouté au panier !'));
@@ -411,17 +407,14 @@ const canAddMoreFlavors = (currentStep: number) => {
       onChange={(e) => setDrinkName(e.target.value)}
       className="text-3xl font-bold text-center text-[#004D40] border-b-2 border-[#004D40]/20 focus:border-[#004D40] outline-none bg-transparent w-full max-w-md mx-auto py-2"
     />
-    
-<<<<<<< HEAD
-  
-=======
+
     {/* Badge calories */}
     <div className="mt-4 inline-block bg-gradient-to-r from-[#FF6F00] to-[#FF8F00] text-white px-6 py-2 rounded-full shadow-lg">
       <span className="text-sm font-semibold">
        
       </span>
     </div>
->>>>>>> 5a9ba01 (Fix: rebuid new)
+
   </div>
 
   <div className="grid md:grid-cols-2 gap-8">
