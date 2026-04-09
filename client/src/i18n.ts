@@ -95,8 +95,7 @@ const resources = {
       "menu.chamomilleTeaDesc": "Infusion camomille + vanille + miel de manuka. Doux, apaisant.",
       "menu.rooibosVanilla": "Rooibos Vanille",
       "menu.rooibosVanillaDesc": "Rooibos sud-africain + vanille. Naturellement sucré, rondeur.",
-      "menu.matchaLatte": "Matcha Latte",
-      "menu.matchaLatteDesc": "Poudre matcha + lait végétal chaud. Umami, crémeux, vert vif.",
+     
 
       // Sodas
       "menu.cocaCola": "Coca-Cola",
@@ -880,8 +879,6 @@ const resources = {
       "menu.greenTeaDesc": "Japanese green tea, vegetal and fresh notes.",
       "menu.blackTea": "Earl Grey Black Tea",
       "menu.blackTeaDesc": "Black tea scented with bergamot.",
-      "menu.matchaLatte": "Matcha Latte",
-      "menu.matchaLatteDesc": "Premium matcha powder, oat milk.",
       "menu.chaiLatte": "Chai Latte",
       "menu.chaiLatteDesc": "Spiced black tea, frothed milk, honey.",
       "menu.herbalTea": "Verbena-Mint Infusion",
@@ -1693,8 +1690,6 @@ const resources = {
       "menu.greenTeaDesc": "Japanischer Grüntee, pflanzliche und frische Noten.",
       "menu.blackTea": "Earl Grey Schwarztee",
       "menu.blackTeaDesc": "Schwarzer Tee mit Bergamotte-Duft.",
-      "menu.matchaLatte": "Matcha Latte",
-      "menu.matchaLatteDesc": "Premium Matcha-Pulver, Hafermilch.",
       "menu.chaiLatte": "Chai Latte",
       "menu.chaiLatteDesc": "Gewürzter Schwarztee, geschäumte Milch, Honig.",
       "menu.herbalTea": "Eisenkraut-Minze-Aufguss",
