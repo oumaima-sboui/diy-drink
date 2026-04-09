@@ -39,28 +39,18 @@ export default function ComposerDuo() {
   const [customFruit2, setCustomFruit2] = useState<Fruit | null>(null);
 
   const POPULAR_COMBOS: DuoCombo[] = [
- 
 
  {
     id: 'mango-orange',
     nameKey: 'combo.MangoOrange',
     side1: 'Mangue',
     side2: 'Orange',
-    side1Image: 'https://images.unsplash.com/photo-1605027990121-cbae9c8c6c8d?w=400',
+    side1Image: 'https://unsplash.com/fr/photos/gros-plan-dune-assiette-de-fruits-sur-une-table-vxtBBfMTMZ0?w=400',
     side2Image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400',
     color: 'from-yellow-400 to-orange-500',
     price: 9.99
   },
-  {
-    id: 'pineapple-mint',
-    nameKey: 'combo.PineappleMint',
-    side1: 'Ananas',
-    side2: 'Menthe-Citron',
-    side1Image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400',
-    side2Image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=400',
-    color: 'from-yellow-300 to-green-400',
-    price: 9.99
-  },
+ 
  {
     id: 'strawberry-banana',
     nameKey: 'combo.StrawberryBanana',
@@ -81,7 +71,6 @@ export default function ComposerDuo() {
     color: 'from-orange-500 to-orange-600',
     price: 9.99
   },
-
     {
       id: 'orange-strawberry',
       nameKey: 'combo.orangeStrawberry',
@@ -116,6 +105,10 @@ export default function ComposerDuo() {
 
   const AVAILABLE_FRUITS: Fruit[] = [
     { id: 'mangue', name: 'Mangue', nameKey: 'ingredient.mangue', image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400', color: 'from-yellow-400 to-orange-400' },
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 5a9ba01 (Fix: rebuid new)
     { id: 'orange', name: 'Orange', nameKey: 'ingredient.orange', image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400', color: 'from-orange-500 to-orange-600' },
     { id: 'fraise', name: 'Fraise', nameKey: 'ingredient.fraise', image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400', color: 'from-red-400 to-pink-500' },
     { id: 'ananas', name: 'Ananas', nameKey: 'ingredient.ananas', image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400', color: 'from-yellow-300 to-yellow-500' },

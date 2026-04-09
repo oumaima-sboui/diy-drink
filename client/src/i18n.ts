@@ -172,9 +172,8 @@ const resources = {
       "combo.orangeStrawberry": "Orange / Fraise",
       "combo.pineappleMintLemon": "Ananas / Menthe-Citron",
       "combo.appleKiwi": "Pomme / Kiwi",
-        "combo.pineappleMint": "Ananas / Menthe",
-  "combo.strawberryBanana": "Fraise / Banane",
-  "combo.orangeCarrot": "Orange / Carotte",
+     "combo.strawberryBanana": "Fraise / Banane",
+     "combo.orangeCarrot": "Orange / Carotte",
 
 // Composer
       "composer.title": "Créer ma boisson",
