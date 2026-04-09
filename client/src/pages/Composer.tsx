@@ -14,7 +14,7 @@ import { generateDrinkName, calculateTotalCalories } from '@/lib/nutrition';
 import Logo from '@/components/Logo';
 import NutritionChart from '@/components/NutritionChart';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getCompatibleBoosters, incompatibleCombos } from '@/lib/boosterCompatibility';
+//import { getCompatibleBoosters, incompatibleCombos } from '@/lib/boosterCompatibility';
 import {
   Dialog,
   DialogContent,
