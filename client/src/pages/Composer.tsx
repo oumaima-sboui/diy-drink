@@ -145,7 +145,7 @@ const toggleIngredient = (ingredient: Ingredient) => {
       basePrice: calculateTotal(),
       ingredients: selectedIngredients,
       quantity: 1
-    }
+    
     });
     
     toast.success(t('composer.addedToCart', 'Ajouté au panier !'));
