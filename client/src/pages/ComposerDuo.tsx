@@ -50,7 +50,7 @@ export default function ComposerDuo() {
     color: 'from-yellow-400 to-orange-500',
     price: 9.99
   },
- 
+  
  {
     id: 'strawberry-banana',
     nameKey: 'combo.StrawberryBanana',

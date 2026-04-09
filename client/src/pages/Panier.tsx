@@ -13,10 +13,8 @@ export default function Panier() {
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const { cart, removeFromCart, updateQuantity, clearCart, getTotalPrice, getItemTotalPrice, updateCartItemIngredients, updateCartItemPrice } = useCart();
-  
   const [showWarningDialog, setShowWarningDialog] = useState(false);
   const [tasteWarnings, setTasteWarnings] = useState<TasteWarning[]>([]);
-
   const getTotalItems = () => {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   };
