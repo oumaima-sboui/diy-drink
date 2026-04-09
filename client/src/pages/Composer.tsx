@@ -144,10 +144,7 @@ const toggleIngredient = (ingredient: Ingredient) => {
       size: selectedSize.id,
       basePrice: calculateTotal(),
       ingredients: selectedIngredients,
-      quantity: 1,
-      customizations: {
-      productName: drinkName, 
-      description: selectedIngredients.map(i => i.name).join(', ')
+      quantity: 1
     }
     });
     
