@@ -17,8 +17,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { getCompatibleBoosters, incompatibleCombos } from '@/lib/boosterCompatibility';
 
-import { getCompatibleBoosters, incompatibleCombos } from '@/lib/boosterCompatibility';
-
 import {
   Dialog,
   DialogContent,
