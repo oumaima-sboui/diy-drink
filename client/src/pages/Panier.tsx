@@ -198,9 +198,7 @@ export default function Panier() {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h3 className="font-bold text-[#004D40] text-lg">
-                        {item.customizations?.productName || t(`composer.${item.type}`)}
-                      </h3>
+                    
                       <p className="text-sm text-gray-600 mb-2">
                         {item.size && `${item.size} • `}
                         {item.ingredients && item.ingredients.length > 0 && (
