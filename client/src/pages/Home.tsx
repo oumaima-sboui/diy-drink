@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, Sparkles, Leaf, Users, CheckCircle } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import TrustBadges from '@/components/TrustBadges';
 
@@ -161,34 +161,32 @@ export default function Home() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {[
-
-         
-
-              { icon: CheckCircle, titleKey: "home.reason1Title", descKey: "home.reason1Desc" },
-              { icon: Users, titleKey: "home.reason2Title", descKey: "home.reason2Desc" },
-              { icon: Leaf, titleKey: "home.reason3Title", descKey: "home.reason3Desc" },
-              { icon: Sparkles, titleKey: "home.reason4Title", descKey: "home.reason4Desc" }
-
-            ].map((reason, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: idx % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-              >
-                <Card className="p-8 bg-white h-full hover:shadow-xl transition-all hover:-translate-y-1">
-                  <reason.icon className="w-12 h-12 text-[#FF6F00] mb-4" />
-                  <h3 className="text-2xl font-bold text-[#004D40] mb-3">
-                    {t(reason.titleKey)}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {t(reason.descKey)}
-                  </p>
-                </Card>
-              </motion.div>
-            ))}
+    {[
+  { titleKey: "home.reason1Title", descKey: "home.reason1Desc" },
+  { titleKey: "home.reason2Title", descKey: "home.reason2Desc" },
+  { titleKey: "home.reason3Title", descKey: "home.reason3Desc" },
+  { titleKey: "home.reason4Title", descKey: "home.reason4Desc" }
+].map((reason, idx) => (
+  <motion.div
+    key={idx}
+    initial={{ opacity: 0, x: idx % 2 === 0 ? -30 : 30 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    viewport={{ once: true }}
+    transition={{ delay: idx * 0.1 }}
+  >
+    <Card className="p-8 bg-white h-full hover:shadow-xl transition-all hover:-translate-y-1">
+    
+      {/* <reason.icon className="w-12 h-12 text-[#FF6F00] mb-4" /> */}
+      
+      <h3 className="text-2xl font-bold text-[#004D40] mb-3">
+        {t(reason.titleKey)}
+      </h3>
+      <p className="text-gray-600 leading-relaxed">
+        {t(reason.descKey)}
+      </p>
+    </Card>
+  </motion.div>
+))}
           </div>
         </div>
       </section>

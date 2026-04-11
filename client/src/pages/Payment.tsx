@@ -240,7 +240,7 @@ export default function Payment() {
         </div>
       </header>
 
-      <div className="container max-w-4xl">
+<div className="container mx-auto px-4 max-w-4xl">  
         <div className="grid md:grid-cols-2 gap-8">
           {/* Formulaire Client */}
           <div className="space-y-6">
