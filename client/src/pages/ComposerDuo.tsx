@@ -45,7 +45,7 @@ export default function ComposerDuo() {
     nameKey: 'combo.MangoOrange',
     side1: 'Mangue',
     side2: 'Orange',
-    side1Image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400',
+    side1Image: 'https://unsplash.com/fr/photos/gros-plan-dune-assiette-de-fruits-sur-une-table-vxtBBfMTMZ0?w=400',
     side2Image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400',
     color: 'from-yellow-400 to-orange-500',
     price: 9.99

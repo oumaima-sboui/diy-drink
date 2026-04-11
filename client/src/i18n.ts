@@ -168,12 +168,12 @@ const resources = {
       "composer.duoCombos": "Combos Fruités",
       "composer.duoAttractivePhrase": "Et si tu te régalais avec deux goûts au même moment ? 🤩",
       // Combos DUO
-      "combo.mangoPassion": "Mangue / Passion",
+      "combo.MangoOrange": "Mangue / Orange",
       "combo.orangeStrawberry": "Orange / Fraise",
       "combo.pineappleMintLemon": "Ananas / Menthe-Citron",
       "combo.appleKiwi": "Pomme / Kiwi",
-     "combo.strawberryBanana": "Fraise / Banane",
-     "combo.orangeCarrot": "Orange / Carotte",
+     "combo.StrawberryBanana": "Fraise / Banane",
+     "combo.OrangeCarrot": "Orange / Carotte",
 
 // Composer
       "composer.title": "Créer ma boisson",
