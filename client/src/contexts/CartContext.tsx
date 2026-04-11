@@ -31,6 +31,7 @@ interface CartContextType {
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
   getCartTotal: () => number;
+  getTotalPrice: () => number;
   updateCartItemIngredients: (itemId: string, ingredients: Ingredient[]) => void;
   updateCartItemPrice: (itemId: string, newPrice: number) => void;
   getItemTotalPrice: (item: CartItem) => number;
@@ -76,7 +77,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return total + getItemTotalPrice(item) * item.quantity;
     }, 0);
   };
-
+const getTotalPrice = () => {
+  return cart.reduce((total, item) => {
+    return total + getItemTotalPrice(item) * item.quantity;
+  }, 0);
+};
   const updateCartItemIngredients = (itemId: string, ingredients: Ingredient[]) => {
     setCart((prev) =>
       prev.map((item) =>
@@ -104,6 +109,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         getCartTotal,
         updateCartItemIngredients,
         updateCartItemPrice,
+getTotalPrice,
         getItemTotalPrice,
       }}
     >

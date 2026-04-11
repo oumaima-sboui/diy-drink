@@ -12,9 +12,20 @@ import { toast } from 'sonner';
 export default function Panier() {
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
-  const { cart, removeFromCart, updateQuantity, clearCart, getTotalPrice, getItemTotalPrice, updateCartItemIngredients, updateCartItemPrice } = useCart();
+  const { 
+    cart, 
+    removeFromCart, 
+    updateQuantity, 
+    clearCart, 
+    getTotalPrice, 
+    getItemTotalPrice, 
+    updateCartItemIngredients, 
+    updateCartItemPrice 
+  } = useCart();
+  
   const [showWarningDialog, setShowWarningDialog] = useState(false);
   const [tasteWarnings, setTasteWarnings] = useState<TasteWarning[]>([]);
+  
   const getTotalItems = () => {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   };
@@ -112,17 +123,7 @@ export default function Panier() {
               ing => ing.name !== ingredientName
             );
             
-            const removedIngredient = item.ingredients.find(ing => ing.name === ingredientName);
-            
-            // Si c'est un add-on (price > 0), on le retire du basePrice
-            if (removedIngredient && removedIngredient.price > 0) {
-              const newBasePrice = item.basePrice; // basePrice ne change PAS
-              updateCartItemIngredients(item.id, updatedIngredients);
-            } else {
-              // Si c'est un ingrédient de base, juste retirer de la liste
-              updateCartItemIngredients(item.id, updatedIngredients);
-            }
-            
+            updateCartItemIngredients(item.id, updatedIngredients);
             somethingChanged = true;
           }
         }
@@ -136,33 +137,33 @@ export default function Panier() {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-[#FAF8F3] botanical-pattern pt-28">
-         <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '0 1rem' }}>
-        <header className="bg-white border-b-2 border-[#E5E5E5]">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <Button variant="ghost" className="text-[#004D40]" asChild>
-              <Link href="/">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                {t('cart.back')}
+      <div className="min-h-screen bg-[#FAF8F3] pt-28">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <header className="bg-white border-b-2 border-[#E5E5E5] py-4 mb-8">
+            <div className="flex items-center justify-between">
+              <Button variant="ghost" className="text-[#004D40]" asChild>
+                <Link href="/">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  {t('cart.back')}
+                </Link>
+              </Button>
+              <h1 className="text-3xl font-bold text-[#004D40]">{t('cart.title')}</h1>
+              <div className="w-24"></div>
+            </div>
+          </header>
+
+          <div className="py-16 text-center">
+            <div className="text-8xl mb-6">🛒</div>
+            <h2 className="text-3xl font-bold mb-4 text-[#004D40]">{t('cart.empty')}</h2>
+            <p className="text-gray-600 mb-8">{t('cart.emptyDesc')}</p>
+            <Button className="bg-[#FF6F00] hover:bg-[#E65100] text-white" size="lg" asChild>
+              <Link href="/composer">
+                {t('cart.compose')}
               </Link>
             </Button>
-            <h1 className="text-3xl font-bold text-[#004D40]">{t('cart.title')}</h1>
-            <div className="w-24"></div>
           </div>
-        </header>
-
-        <div className="container py-16 text-center">
-          <div className="text-8xl mb-6">🛒</div>
-          <h2 className="text-3xl font-bold mb-4 text-[#004D40]">{t('cart.empty')}</h2>
-          <p className="text-gray-600 mb-8">{t('cart.emptyDesc')}</p>
-          <Button className="bg-[#FF6F00] hover:bg-[#E65100] text-white" size="lg" asChild>
-            <Link href="/composer">
-              {t('cart.compose')}
-            </Link>
-          </Button>
         </div>
       </div>
-    </div>
     );
   }
 
@@ -171,24 +172,23 @@ export default function Panier() {
   const total = subtotal + tax;
 
   return (
-    <div className="min-h-screen bg-[#FAF8F3] botanical-pattern pt-28">
-      <header className="bg-white border-b-2 border-[#E5E5E5]">
-        <div className="mx-auto px-4 max-w-4xl w-full">
-      
-          <Button variant="ghost" className="text-[#004D40]" asChild>
-            <Link href="/">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {t('cart.back')}
-            </Link>
-          </Button>
-          <h1 className="text-3xl font-bold text-[#004D40]">
-            {t('cart.title')} ({getTotalItems()})
-          </h1>
-          <div className="w-24"></div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#FAF8F3] pt-28">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <header className="bg-white border-b-2 border-[#E5E5E5] py-4 mb-8">
+          <div className="flex items-center justify-between">
+            <Button variant="ghost" className="text-[#004D40]" asChild>
+              <Link href="/">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {t('cart.back')}
+              </Link>
+            </Button>
+            <h1 className="text-3xl font-bold text-[#004D40]">
+              {t('cart.title')} ({getTotalItems()})
+            </h1>
+            <div className="w-24"></div>
+          </div>
+        </header>
 
-      <div className="container py-8 max-w-4xl">
         <div className="space-y-4 mb-8">
           {cart.map((item) => {
             const itemTotal = getItemTotalPrice(item);
@@ -198,7 +198,10 @@ export default function Panier() {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                    
+                      <h3 className="font-bold text-[#004D40] text-lg mb-2">
+                        {item.customizations?.productName || t(`composer.${item.type}`)}
+                      </h3>
+                      
                       <p className="text-sm text-gray-600 mb-2">
                         {item.size && `${item.size} • `}
                         {item.ingredients && item.ingredients.length > 0 && (
@@ -212,18 +215,16 @@ export default function Panier() {
                       </p>
                       
                       {/* Add-ons */}
-
                       {item.ingredients && item.ingredients.filter(ing => ing.price > 0).length > 0 && (
                         <div className="mt-2 mb-3">
                           <p className="text-xs font-semibold text-[#FF6F00] mb-1">⚡ Add-ons:</p>
                           <div className="space-y-1">
-                            
                             {item.ingredients
                               .filter(ing => ing.price > 0)
                               .map((addon, idx) => (
                                 <div key={idx} className="flex items-center justify-between bg-[#FF6F00]/10 px-2 py-1 rounded">
                                   <span className="text-xs font-medium text-[#FF6F00]">
-                                    {addon.emoji} {t(addon.nameKey)}
+                                    {addon.emoji} {addon.name}
                                   </span>
                                   <span className="text-xs font-bold text-[#FF6F00]">
                                     +{addon.price.toFixed(2)}€

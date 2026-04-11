@@ -165,10 +165,10 @@ export default function Home() {
 
          
 
-              { icon: CheckCircle, titleKey: "home.reason1Title", descKey: "home.reason1Desc" },
-              { icon: Users, titleKey: "home.reason2Title", descKey: "home.reason2Desc" },
-              { icon: Leaf, titleKey: "home.reason3Title", descKey: "home.reason3Desc" },
-              { icon: Sparkles, titleKey: "home.reason4Title", descKey: "home.reason4Desc" }
+              {  titleKey: "home.reason1Title", descKey: "home.reason1Desc" },
+              { titleKey: "home.reason2Title", descKey: "home.reason2Desc" },
+              { titleKey: "home.reason3Title", descKey: "home.reason3Desc" },
+              {titleKey: "home.reason4Title", descKey: "home.reason4Desc" }
 
             ].map((reason, idx) => (
               <motion.div
