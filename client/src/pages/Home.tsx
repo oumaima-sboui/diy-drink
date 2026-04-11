@@ -163,10 +163,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {[
 
-              {titleKey: "home.reason1Title", descKey: "home.reason1Desc" },
-              {titleKey: "home.reason2Title", descKey: "home.reason2Desc" },
-              { titleKey: "home.reason3Title", descKey: "home.reason3Desc" },
-              {titleKey: "home.reason4Title", descKey: "home.reason4Desc" },
+         
 
               { icon: CheckCircle, titleKey: "home.reason1Title", descKey: "home.reason1Desc" },
               { icon: Users, titleKey: "home.reason2Title", descKey: "home.reason2Desc" },
