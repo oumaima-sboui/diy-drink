@@ -45,7 +45,7 @@ export default function ComposerDuo() {
     nameKey: 'combo.MangoOrange',
     side1: 'Mangue',
     side2: 'Orange',
-    side1Image: 'https://unsplash.com/fr/photos/gros-plan-dune-assiette-de-fruits-sur-une-table-vxtBBfMTMZ0?w=400',
+    side1Image: '/images/mango.jpg?w=400',
     side2Image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400',
     color: 'from-yellow-400 to-orange-500',
     price: 9.99
@@ -104,7 +104,7 @@ export default function ComposerDuo() {
   ];
 
   const AVAILABLE_FRUITS: Fruit[] = [
-    { id: 'mangue', name: 'Mangue', nameKey: 'ingredient.mangue', image: 'https://images.unsplash.com/photo-1562910882-b2867e817b98?w=400', color: 'from-yellow-400 to-orange-400' },
+    { id: 'mangue', name: 'Mangue', nameKey: 'ingredient.mangue', image: '/images/mango.jpg?w=400', color: 'from-yellow-400 to-orange-400' },
     { id: 'orange', name: 'Orange', nameKey: 'ingredient.orange', image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400', color: 'from-orange-500 to-orange-600' },
     { id: 'fraise', name: 'Fraise', nameKey: 'ingredient.fraise', image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400', color: 'from-red-400 to-pink-500' },
     { id: 'ananas', name: 'Ananas', nameKey: 'ingredient.ananas', image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400', color: 'from-yellow-300 to-yellow-500' },
