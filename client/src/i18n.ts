@@ -77,7 +77,7 @@ const resources = {
       "home.testimonial3": "\"Le concept DUO est génial ! Mangue-Passion d'un côté, Ananas-Menthe de l'autre.\"",
       "home.testimonial3Author": "Léa, étudiante",
       
-      "home.ctaTitle": "Prêt à créer VOTRE boisson ?",
+      "home.ctaTitle": "Prêt à créer votre boisson ?",
       "home.ctaSubtitle": "Des milliers de combinaisons possibles",
       "home.ctaButton": "Commencer maintenant",
 // Menu - Changement de nom
@@ -1298,7 +1298,7 @@ const resources = {
       "home.testimonial3": "\"The DUO concept is amazing! Mango-Passion on one side, Pineapple-Mint on the other.\"",
       "home.testimonial3Author": "Léa, student",
       
-      "home.ctaTitle": "Ready to create YOUR drink?",
+      "home.ctaTitle": "Ready to create your drink?",
       "home.ctaSubtitle": "Thousands of possible combinations",
       "home.ctaButton": "Start now",
       // Messages
@@ -1401,7 +1401,7 @@ const resources = {
       "home.testimonial3": "\"Das DUO-Konzept ist großartig! Mango-Passion auf der einen Seite, Ananas-Minze auf der anderen.\"",
       "home.testimonial3Author": "Léa, Studentin",
       
-      "home.ctaTitle": "Bereit, DEIN Getränk zu kreieren?",
+      "home.ctaTitle": "Bereit, dein Getränk zu kreieren?",
       "home.ctaSubtitle": "Tausende mögliche Kombinationen",
       "home.ctaButton": "Jetzt starten",
       // Add-ons

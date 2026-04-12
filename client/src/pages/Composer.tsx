@@ -501,9 +501,7 @@ const canAddMoreFlavors = (currentStep: number) => {
                         <div className="font-bold">
                           {t(`composer.${size.id}`)}
                         </div>
-                        <div className={`text-sm ${selectedSize.id === size.id ? 'text-white/80' : 'text-gray-500'}`}>
-                          {size.volume}
-                        </div>
+                       
                       </button>
                     ))}
                   </div>
