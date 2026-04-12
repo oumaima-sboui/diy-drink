@@ -10,6 +10,8 @@ import Payment from '@/pages/Payment';
 import Workers from '@/pages/Workers';
 import Login from '@/pages/Login';
 import Admin from '@/pages/Admin';
+import NotreHistoire from '@/pages/NotreHistoire';
+import Blog from '@/pages/Blog';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
             <Route path="/workers" component={Workers} />
             <Route path="/login" component={Login} />
             <Route path="/admin" component={Admin} />
+<Route path="/notre-histoire" component={NotreHistoire} />
+<Route path="/blog" component={Blog} />
           </main>
         </div>
       </Router>

@@ -131,24 +131,27 @@ const toggleIngredient = (ingredient: Ingredient) => {
 };
 
   const handleAddToCart = () => {
-    if (selectedIngredients.length === 0) {
-      toast.error(t('composer.errorNoIngredient', 'Veuillez sélectionner au moins un ingrédient'));
-      return;
+  if (selectedIngredients.length === 0) {
+    toast.error(t('composer.errorNoIngredient', 'Veuillez sélectionner au moins un ingrédient'));
+    return;
+  }
+  
+  addToCart({
+    id: `${drinkType}-${Date.now()}`,
+    type: drinkType,
+    size: selectedSize.id,
+    basePrice: calculateTotal(),
+    ingredients: selectedIngredients,
+    quantity: 1,
+    customizations: {
+      productName: drinkName, // ✅ Utilise le nom personnalisé
+      description: selectedIngredients.map(i => i.name).join(', ')
     }
-    
- addToCart({
-      id: `${drinkType}-${Date.now()}`,
-      type: drinkType,
-      size: selectedSize.id,
-      basePrice: calculateTotal(),
-      ingredients: selectedIngredients,
-      quantity: 1
-    
-    });
-    
-    toast.success(t('composer.addedToCart', 'Ajouté au panier !'));
-    setLocation('/panier');
-  };
+  });
+  
+  toast.success(t('composer.addedToCart', 'Ajouté au panier !'));
+  setLocation('/panier');
+};
 const nextStep = () => {
   // Vérifier qu'au moins un ingrédient de base est sélectionné avant d'aller aux boosters
   if (currentStep === 2 && selectedIngredients.length === 0) {
@@ -393,22 +396,21 @@ const canAddMoreFlavors = (currentStep: number) => {
   <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF6F00]/10 rounded-bl-full -mr-10 -mt-10" />
   
   <div className="mb-8 text-center">
-    <label className="block text-sm font-medium text-gray-500 mb-2">
-      {t('composer.drinkName')}
-    </label>
-    <input 
-      type="text" 
-      value={drinkName}
-      onChange={(e) => setDrinkName(e.target.value)}
-      className="text-3xl font-bold text-center text-[#004D40] border-b-2 border-[#004D40]/20 focus:border-[#004D40] outline-none bg-transparent w-full max-w-md mx-auto py-2"
-    />
+ <label className="block text-sm font-medium text-gray-500 mb-2">
+    {t('composer.drinkName')}
+  </label>
+  <input 
+    type="text" 
+    value={drinkName}
+    onChange={(e) => setDrinkName(e.target.value)}
+    placeholder={t('composer.drinkNamePlaceholder', 'Mon Smoothie Perso')}
+    className="text-3xl font-bold text-center text-[#004D40] border-b-2 border-[#004D40]/20 focus:border-[#004D40] outline-none bg-transparent w-full max-w-md mx-auto py-2"
+  />
+  <p className="text-xs text-gray-500 mt-2">
+    {t('composer.drinkNameHelp', '✏️ Cliquez pour personnaliser le nom')}
+  </p>
 
-    {/* Badge calories */}
-    <div className="mt-4 inline-block bg-gradient-to-r from-[#FF6F00] to-[#FF8F00] text-white px-6 py-2 rounded-full shadow-lg">
-      <span className="text-sm font-semibold">
-       
-      </span>
-    </div>
+  
 
   </div>
 

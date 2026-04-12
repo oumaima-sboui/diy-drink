@@ -99,6 +99,7 @@ export default function Workers() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] pt-20">
+        <div className="container mx-auto px-4 max-w-6xl"> 
       <header className="border-b border-border/40 bg-white">
         <div className="container py-6">
           <div className="flex items-center justify-between">
@@ -175,7 +176,7 @@ export default function Workers() {
                       <TableRow key={order.id}>
                         <TableCell className="font-medium">{order.orderNumber}</TableCell>
                         <TableCell className="font-semibold text-lg">
-                          {parseFloat(order.totalAmount).toFixed(2)}€
+                         {parseFloat(order.totalAmount).toFixed(2)}€
                         </TableCell>
                         <TableCell>
                           <Select
@@ -345,5 +346,6 @@ export default function Workers() {
         </DialogContent>
       </Dialog>
     </div>
+  </div>
   );
 }
