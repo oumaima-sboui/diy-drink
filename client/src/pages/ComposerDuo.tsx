@@ -259,16 +259,16 @@ const handleAddCustomCombo = () => {
 
           {/* Combos Populaires */}
           <TabsContent value="popular">
-            <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-4">
               {POPULAR_COMBOS.map((combo) => (
                 <Card
                   key={combo.id}
                   onClick={() => setSelectedCombo(combo)}
-                  className={`p-6 cursor-pointer transition-all border-2 relative hover:shadow-xl ${
-                    selectedCombo?.id === combo.id
-                      ? 'border-[#FF6F00] bg-[#FF6F00]/5 shadow-xl scale-105'
-                      : 'border-gray-200 hover:border-[#FF6F00]/50'
-                  }`}
+                  className={`p-4 cursor-pointer transition-all border-2 relative hover:shadow-xl ${  /* ← CHANGER p-6 en p-4 */
+        selectedCombo?.id === combo.id
+          ? 'border-[#FF6F00] bg-[#FF6F00]/5 shadow-xl scale-105'
+          : 'border-gray-200 hover:border-[#FF6F00]/50'
+      }`}
                 >
                   {selectedCombo?.id === combo.id && (
                     <div className="absolute top-4 right-4 bg-[#FF6F00] text-white rounded-full p-2 shadow-lg z-10">
@@ -278,11 +278,11 @@ const handleAddCustomCombo = () => {
                   
                   <div className={`w-full h-3 rounded-full bg-gradient-to-r ${combo.color} mb-6`} />
                   
-                  <h3 className="text-2xl font-bold text-[#004D40] mb-6 text-center">
+                  <h3 className="text-xl font-bold text-[#004D40] mb-4 text-center"> 
                     {t(combo.nameKey)}
                   </h3>
                   
-                  <div className="flex justify-between items-center gap-4 mb-6">
+                  <div className="flex justify-between items-center gap-3 mb-4">
                     <div className="flex-1 text-center">
                       <div className="relative w-32 h-32 mx-auto mb-3 rounded-full overflow-hidden shadow-lg border-4 border-white">
                         <img 
@@ -291,16 +291,17 @@ const handleAddCustomCombo = () => {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <p className="font-bold text-lg text-[#004D40]">{combo.side1}</p>
+                      <p className="font-bold text-sm text-[#004D40]">{combo.side1}</p>
                     </div>
 
                     <div className="flex flex-col items-center">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#FF6F00] to-[#FF8F00] flex items-center justify-center shadow-lg">
-                        <span className="text-white text-2xl font-bold">+</span>
+                         <span className="text-white text-xl font-bold">+</span> 
                       </div>
                     </div>
 
                     <div className="flex-1 text-center">
+                         <span className="text-white text-xl font-bold">+</span> 
                       <div className="relative w-32 h-32 mx-auto mb-3 rounded-full overflow-hidden shadow-lg border-4 border-white">
                         <img 
                           src={combo.side2Image} 
@@ -308,12 +309,11 @@ const handleAddCustomCombo = () => {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <p className="font-bold text-lg text-[#004D40]">{combo.side2}</p>
+                    <p className="font-bold text-sm text-[#004D40]">{combo.side2}</p>
                     </div>
                   </div>
-
-                  <div className="text-center pt-4 border-t-2 border-gray-100">
-                    <span className="text-3xl font-bold text-[#FF6F00]">
+<div className="text-center pt-3 border-t-2 border-gray-100">  
+        <span className="text-2xl font-bold text-[#FF6F00]">
                       {combo.price.toFixed(2)}€
                     </span>
                   </div>

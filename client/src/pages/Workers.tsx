@@ -254,7 +254,7 @@ export default function Workers() {
                 </div>
                 <div>
                   <p className="text-muted-foreground">Total</p>
-                  <p className="font-semibold text-lg">{selectedOrder.totalAmount.toFixed(2)}€</p>
+                 <p className="font-semibold text-lg">{parseFloat(selectedOrder.totalAmount).toFixed(2)}€</p>
                 </div>
               </div>
 
