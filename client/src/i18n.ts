@@ -31,7 +31,7 @@ const resources = {
       // Nouvelle Home
       "home.heroTitle": "Créez Votre Boisson Parfaite",
       "home.heroSubtitle": "100% Naturel • Personnalisable • Fait Minute",
-      "home.heroDescription": "Chez DIY Drink It Yourself, VOUS êtes le barista. Choisissez vos fruits, superfoods et add-ons pour composer la boisson qui vous ressemble.",
+      "home.heroDescription": "Chez DIY Drink It Yourself, vous êtes le barista. Choisissez vos fruits, superfoods et add-ons pour composer la boisson qui vous ressemble.",
       "home.heroCTA": "Composer ma boisson",
       "home.heroSecondaryCTA": "Découvrir nos créations",
       
@@ -182,7 +182,7 @@ const resources = {
       "composer.step2": "Les Saveurs",
       "composer.step3": "Les Boosters",
       "composer.step4": "La Signature",
-      "composer.step1Desc": "Choisissez la base liquide fondateurs de votre boisson.",
+      "composer.step1Desc": "Choisissez la base liquide fondateur de votre boisson.",
       "composer.step2Desc": "Ajoutez du goût et des vitamines avec nos fruits frais.",
       "composer.step3Desc": "Boostez votre santé avec nos super-aliments et épices.",
       "composer.masterpiece": "Votre Chef-d'œuvre",
@@ -1252,7 +1252,7 @@ const resources = {
       // New Home
       "home.heroTitle": "Craft Your Perfect Drink",
       "home.heroSubtitle": "100% Natural • Customizable • Made Fresh",
-      "home.heroDescription": "At DIY Drink It Yourself, YOU are the barista. Choose your fruits, superfoods, and add-ons to create a drink that's uniquely yours.",
+      "home.heroDescription": "At DIY Drink It Yourself, you are the barista. Choose your fruits, superfoods, and add-ons to create a drink that's uniquely yours.",
       "home.heroCTA": "Create my drink",
       "home.heroSecondaryCTA": "Discover our creations",
       
@@ -1355,7 +1355,7 @@ const resources = {
       // Neue Startseite
       "home.heroTitle": "Kreiere Dein Perfektes Getränk",
       "home.heroSubtitle": "100% Natürlich • Anpassbar • Frisch Zubereitet",
-      "home.heroDescription": "Bei DIY Drink It Yourself bist DU der Barista. Wähle deine Früchte, Superfoods und Add-ons, um ein Getränk zu kreieren, das zu dir passt.",
+      "home.heroDescription": "Bei DIY Drink It Yourself bist du der Barista. Wähle deine Früchte, Superfoods und Add-ons, um ein Getränk zu kreieren, das zu dir passt.",
       "home.heroCTA": "Mein Getränk erstellen",
       "home.heroSecondaryCTA": "Unsere Kreationen entdecken",
       
