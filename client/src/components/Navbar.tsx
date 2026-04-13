@@ -117,7 +117,10 @@ export default function Navbar() {
                   <Globe className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent   align="end" 
+  sideOffset={5}
+  className="z-[9999] bg-white shadow-lg rounded-md border"
+>
                 <DropdownMenuLabel>Language / Langue</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {languages.map((lang) => (
@@ -143,7 +146,10 @@ export default function Navbar() {
       <ChevronDown className="h-4 w-4" />
     </Button>
   </DropdownMenuTrigger>
-  <DropdownMenuContent align="end" className="w-48">
+  <DropdownMenuContent   align="end" 
+  sideOffset={5}
+  className="z-[9999] bg-white shadow-lg rounded-md border"
+>
     {user.role === 'worker' && (
       <DropdownMenuItem onClick={() => setLocation('/workers')}>
         <Briefcase className="mr-2 h-4 w-4" />
