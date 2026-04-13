@@ -260,7 +260,7 @@ export default function Payment() {
             </Card>
 
             <Card>
-              <div className="bg-white rounded-lg shadow-md p-6 relative z-10">  
+              
               <CardHeader>
                 <CardTitle>{t('payment.method')}</CardTitle>
               </CardHeader>
@@ -269,8 +269,14 @@ export default function Payment() {
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="card">
+               <SelectContent className="
+  bg-white 
+  text-black 
+  border 
+  shadow-lg 
+  rounded-md 
+  z-50
+">                    <SelectItem value="card">
                       <div className="flex items-center gap-2">
                         <CreditCard className="w-4 h-4" />
                         {t('payment.card')}
@@ -355,8 +361,7 @@ export default function Payment() {
                   </div>
                 )}
               </CardContent>
-           </div>
-           </Card>
+            </Card>
           </div>
 
           {/* Récapitulatif */}
