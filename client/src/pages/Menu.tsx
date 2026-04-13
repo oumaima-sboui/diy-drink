@@ -802,25 +802,25 @@ const ProductCard = ({ product, type }: { product: any, type: string }) => {
                 value="jus"
                 className="rounded-full px-6 py-3 data-[state=active]:bg-[#004D40] data-[state=active]:text-white transition-all"
               >
-                <Leaf className="w-4 h-4 mr-2" /> {t('menu.extractedJuices')}
+                <Leaf className="w-4 h-4 mr-2" />{t('menu.extractedJuices')}
               </TabsTrigger>
               <TabsTrigger 
                 value="smoothies"
                 className="rounded-full px-6 py-3 data-[state=active]:bg-[#004D40] data-[state=active]:text-white transition-all"
               >
-                <Coffee className="w-4 h-4 mr-2" /> {t('menu.smoothies')}
+                <Coffee className="w-4 h-4 mr-2" />{t('menu.smoothies')}
               </TabsTrigger>
               <TabsTrigger 
                 value="snacks"
                 className="rounded-full px-6 py-3 data-[state=active]:bg-[#004D40] data-[state=active]:text-white transition-all"
               >
-                <Cookie className="w-4 h-4 mr-2" /> {t('menu.snacks')}
+                <Cookie className="w-4 h-4 mr-2" />{t('menu.snacks')}
               </TabsTrigger>
               <TabsTrigger value="boissons_chaudes">
-  <Coffee className="w-4 h-4 mr-2" /> {t('menu.coffeeTea')}
+  <Coffee className="w-4 h-4 mr-2" />{t('menu.coffeeTea')}
 </TabsTrigger>
 <TabsTrigger value="eau_boissons">
-  <Leaf className="w-4 h-4 mr-2" /> {t('menu.waterSodas')}
+  <Leaf className="w-4 h-4 mr-2" />{t('menu.waterSodas')}
 </TabsTrigger>
             </TabsList>
           </div>
