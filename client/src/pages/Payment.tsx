@@ -260,46 +260,103 @@ export default function Payment() {
             </Card>
 
             <Card>
+              <div className="bg-white rounded-lg shadow-md p-6 relative z-10">  
               <CardHeader>
                 <CardTitle>{t('payment.method')}</CardTitle>
               </CardHeader>
-           {/* MÉTHODE DE PAIEMENT */}
-<div className="space-y-4">
-  <h3 className="text-lg font-semibold text-[#004D40]">
-    {t('payment.method')}
-  </h3>
-  
-  <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-    <SelectTrigger className="w-full">
-      <SelectValue placeholder={t('payment.method')} />
-    </SelectTrigger>
-    <SelectContent className="z-[100]">  {/* ← AJOUTER z-[100] */}
-      <SelectItem value="card">
-        💳 {t('payment.card')}
-      </SelectItem>
-      <SelectItem value="mobile">
-        📱 {t('payment.mobile')}
-      </SelectItem>
-      <SelectItem value="cash">
-        💵 {t('payment.cash')}
-      </SelectItem>
-    </SelectContent>
-  </Select>
+              <CardContent className="space-y-4">
+                <Select value={paymentMethod} onValueChange={(value: any) => setPaymentMethod(value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="card">
+                      <div className="flex items-center gap-2">
+                        <CreditCard className="w-4 h-4" />
+                        {t('payment.card')}
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="mobile">
+                      <div className="flex items-center gap-2">
+                        <Wallet className="w-4 h-4" />
+                        {t('payment.mobile')}
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="cash">
+                      <div className="flex items-center gap-2">
+                        <Banknote className="w-4 h-4" />
+                        {t('payment.cash')}
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
 
-  {/* Description de la méthode */}
-  {paymentMethod === 'mobile' && (
-    <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded border border-blue-200">
-      ℹ️ {t('payment.mobileInfo')}
-    </p>
-  )}
-  
-  {paymentMethod === 'cash' && (
-    <p className="text-sm text-gray-600 bg-green-50 p-3 rounded border border-green-200">
-      ℹ️ {t('payment.cashInfo')}
-    </p>
-  )}
-</div>
-            </Card>
+                {paymentMethod === "card" && (
+                  <div className="space-y-4 pt-4 border-t">
+                    <p className="text-sm text-muted-foreground">
+                      💳 {t('payment.testCard', 'Mode test - Utilisez : 4242 4242 4242 4242')}
+                    </p>
+                    <div className="space-y-2">
+                      <Label>{t('payment.cardNumber')}</Label>
+                      <Input 
+                        placeholder="4242 4242 4242 4242"
+                        value={cardInfo.number}
+                        onChange={(e) => {
+                          let value = e.target.value.replace(/\s/g, '');
+                          value = value.match(/.{1,4}/g)?.join(' ') || value;
+                          setCardInfo({...cardInfo, number: value});
+                        }}
+                        maxLength={19}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>{t('payment.expiration')}</Label>
+                        <Input 
+                          placeholder="12/25"
+                          value={cardInfo.expiration}
+                          onChange={(e) => {
+                            let value = e.target.value.replace(/\D/g, '');
+                            if (value.length >= 2) {
+                              value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                            }
+                            setCardInfo({...cardInfo, expiration: value});
+                          }}
+                          maxLength={5}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>{t('payment.cvv')}</Label>
+                        <Input 
+                          placeholder="123" 
+                          type="password" 
+                          maxLength={4}
+                          value={cardInfo.cvv}
+                          onChange={(e) => setCardInfo({...cardInfo, cvv: e.target.value.replace(/\D/g, '')})}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {paymentMethod === "mobile" && (
+                  <div className="pt-4 border-t">
+                    <p className="text-sm text-muted-foreground">
+                      📱 {t('payment.mobileInfo', 'Paiement mobile via Apple Pay, Google Pay, etc.')}
+                    </p>
+                  </div>
+                )}
+
+                {paymentMethod === "cash" && (
+                  <div className="pt-4 border-t">
+                    <p className="text-sm text-muted-foreground">
+                      💵 {t('payment.cashInfo', 'Vous paierez en espèces à la livraison')}
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+           </div>
+           </Card>
           </div>
 
           {/* Récapitulatif */}
