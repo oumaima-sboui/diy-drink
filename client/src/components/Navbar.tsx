@@ -119,7 +119,7 @@ export default function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent   align="end" 
   sideOffset={5}
-  className="z-[9999] bg-white shadow-lg rounded-md border"
+  className="z-[9999] bg-white shadow-lg pointer-events-auto"
 >
                 <DropdownMenuLabel>Language / Langue</DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -148,7 +148,7 @@ export default function Navbar() {
   </DropdownMenuTrigger>
   <DropdownMenuContent   align="end" 
   sideOffset={5}
-  className="z-[9999] bg-white shadow-lg rounded-md border"
+ className="z-[9999] bg-white shadow-lg pointer-events-auto"
 >
     {user.role === 'worker' && (
       <DropdownMenuItem onClick={() => setLocation('/workers')}>
