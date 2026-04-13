@@ -210,7 +210,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            style={{ pointerEvents: "auto" }
+            style={{ pointerEvents: "auto" }}
             className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
           >
             <nav className="flex flex-col p-4 gap-2">
