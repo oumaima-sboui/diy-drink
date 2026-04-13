@@ -850,9 +850,9 @@ const ProductCard = ({ product, type }: { product: any, type: string }) => {
           </TabsContent>
 
           <TabsContent value="boissons_chaudes" className="mt-0">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
               {SIGNATURE_PRODUCTS.boissons_chaudes.map((product) => (
-                <ProductCard key={product.id} product={product} type="boisson_chaude" />
+                <ProductCard className="h-full flex flex-col" key={product.id} product={product} type="boisson_chaude" />
               ))}
             </div>
           </TabsContent>
