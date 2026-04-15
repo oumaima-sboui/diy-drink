@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
 import { 
   Menu, 
@@ -20,14 +20,6 @@ import Logo from '@/components/Logo'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu"
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +27,14 @@ export default function Navbar() {
   const [location, setLocation] = useLocation();
   const { cart } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
+  
+  // États pour les dropdowns
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  
+  // Refs pour détecter les clics extérieurs
+  const langMenuRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,6 +42,21 @@ export default function Navbar() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Fermer les menus au clic extérieur
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
+        setLangMenuOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const navLinks = [
@@ -57,15 +72,10 @@ export default function Navbar() {
       await logout();
       toast.success(t('message.success'));
       setLocation('/');
+      setUserMenuOpen(false);
     } catch (error) {
       toast.error(t('message.error'));
     }
-  };
-
-  const getDashboardLink = () => {
-    if (user?.role === 'admin') return '/admin';
-    if (user?.role === 'worker') return '/workers';
-    return '/';
   };
 
   const languages = [
@@ -74,12 +84,17 @@ export default function Navbar() {
     { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
   ];
 
+  const handleLanguageChange = (langCode: string) => {
+    i18n.changeLanguage(langCode);
+    setLangMenuOpen(false);
+  };
+
   return (
     <header
-  className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-    scrolled ? 'bg-white shadow-md py-2' : 'bg-white shadow-sm py-4'
-  }`}
->
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-md py-2' : 'bg-white shadow-sm py-4'
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -97,8 +112,8 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span className={`text-sm font-semibold transition-colors cursor-pointer relative group ${
-  location === link.href ? 'text-[#FF6F00]' : 'text-gray-800 hover:text-[#FF6F00]'
-}`}>
+                  location === link.href ? 'text-[#FF6F00]' : 'text-gray-800 hover:text-[#FF6F00]'
+                }`}>
                   {link.label}
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-[#FF6F00] transform origin-left transition-transform duration-300 ${
                     location === link.href ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
@@ -111,62 +126,117 @@ export default function Navbar() {
           {/* Actions */}
           <div className="flex items-center gap-2">
             {/* Language Selector */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-[#004D40] hover:text-[#FF6F00] hover:bg-transparent">
-                  <Globe className="w-5 h-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent   align="end" 
-className="z-[100]"
->
-                <DropdownMenuLabel>Language / Langue</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {languages.map((lang) => (
-                  <DropdownMenuItem 
-                    key={lang.code}
-                    onClick={() => i18n.changeLanguage(lang.code)}
+            <div className="relative" ref={langMenuRef}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-[#004D40] hover:text-[#FF6F00] hover:bg-transparent"
+                onClick={() => {
+                  setLangMenuOpen(!langMenuOpen);
+                  setUserMenuOpen(false);
+                }}
+              >
+                <Globe className="w-5 h-5" />
+              </Button>
+              
+              <AnimatePresence>
+                {langMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 top-full mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden z-[100]"
                   >
-                    <span className="mr-2">{lang.flag}</span> 
-                    {lang.name}
-                    {i18n.language === lang.code && <span className="ml-auto">✓</span>}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    <div className="p-2">
+                      <p className="text-xs font-semibold text-gray-500 px-2 py-1.5">
+                        Language / Langue
+                      </p>
+                      <div className="border-t border-gray-100 my-1" />
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => handleLanguageChange(lang.code)}
+                          className="w-full text-left px-2 py-2 hover:bg-gray-100 rounded flex items-center gap-2 text-sm transition-colors"
+                        >
+                          <span>{lang.flag}</span>
+                          <span>{lang.name}</span>
+                          {i18n.language === lang.code && (
+                            <span className="ml-auto text-[#FF6F00] font-bold">✓</span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* User Menu / Login Button */}
             {isAuthenticated && user ? (
-            <DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <Button variant="ghost" className="flex items-center gap-2">
-      <User className="h-5 w-5" />
-      <span className="hidden md:inline">{user.name}</span>
-      <ChevronDown className="h-4 w-4" />
-    </Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent   align="end" 
- className="z-[100]"
->
-    {user.role === 'worker' && (
-      <DropdownMenuItem onClick={() => setLocation('/workers')}>
-        <Briefcase className="mr-2 h-4 w-4" />
-        {t('navbar.workersPanel')}
-      </DropdownMenuItem>
-    )}
-    {user.role === 'admin' && (
-      <DropdownMenuItem onClick={() => setLocation('/admin')}>
-        <Shield className="mr-2 h-4 w-4" />
-        {t('navbar.adminPanel')}
-      </DropdownMenuItem>
-    )}
-    <DropdownMenuSeparator />
-    <DropdownMenuItem onClick={handleLogout}>
-      <LogOut className="mr-2 h-4 w-4" />
-      {t('navbar.logout')}
-    </DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
+              <div className="relative" ref={userMenuRef}>
+                <Button 
+                  variant="ghost" 
+                  className="flex items-center gap-2"
+                  onClick={() => {
+                    setUserMenuOpen(!userMenuOpen);
+                    setLangMenuOpen(false);
+                  }}
+                >
+                  <User className="h-5 w-5" />
+                  <span className="hidden md:inline">{user.name}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+                
+                <AnimatePresence>
+                  {userMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 top-full mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden z-[100]"
+                    >
+                      <div className="p-2">
+                        {user.role === 'worker' && (
+                          <button
+                            onClick={() => {
+                              setLocation('/workers');
+                              setUserMenuOpen(false);
+                            }}
+                            className="w-full text-left px-2 py-2 hover:bg-gray-100 rounded flex items-center gap-2 text-sm transition-colors"
+                          >
+                            <Briefcase className="h-4 w-4" />
+                            Workers
+                          </button>
+                        )}
+                        {user.role === 'admin' && (
+                          <button
+                            onClick={() => {
+                              setLocation('/admin');
+                              setUserMenuOpen(false);
+                            }}
+                            className="w-full text-left px-2 py-2 hover:bg-gray-100 rounded flex items-center gap-2 text-sm transition-colors"
+                          >
+                            <Shield className="h-4 w-4" />
+                            Admin
+                          </button>
+                        )}
+                        {(user.role === 'worker' || user.role === 'admin') && (
+                          <div className="border-t border-gray-100 my-1" />
+                        )}
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-2 py-2 hover:bg-red-50 text-red-600 rounded flex items-center gap-2 text-sm transition-colors"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          {t('nav.logout')}
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ) : (
               <Button 
                 variant="ghost" 
@@ -208,7 +278,6 @@ className="z-[100]"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            style={{ pointerEvents: "auto" }}
             className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
           >
             <nav className="flex flex-col p-4 gap-2">
@@ -229,7 +298,7 @@ className="z-[100]"
               <div className="border-t border-gray-200 mt-2 pt-2">
                 <div className="px-2 py-2">
                   <p className="text-xs text-muted-foreground mb-2">Language / Langue</p>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-3 gap-2">
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
@@ -237,7 +306,7 @@ className="z-[100]"
                           i18n.changeLanguage(lang.code);
                           setIsOpen(false);
                         }}
-                        className={`px-3 py-2 rounded text-sm flex items-center gap-2 ${
+                        className={`px-3 py-2 rounded text-sm flex items-center justify-center gap-2 ${
                           i18n.language === lang.code 
                             ? 'bg-[#FF6F00] text-white' 
                             : 'bg-gray-100 text-[#004D40]'
@@ -258,16 +327,28 @@ className="z-[100]"
                       <p className="font-medium text-[#004D40]">{user.name}</p>
                       <p className="text-xs text-muted-foreground">{user.email}</p>
                     </div>
-                    {(user.role === 'admin' || user.role === 'worker') && (
+                    {user.role === 'admin' && (
                       <button
                         onClick={() => {
-                          setLocation(getDashboardLink());
+                          setLocation('/admin');
                           setIsOpen(false);
                         }}
                         className="w-full text-left px-2 py-2 text-[#004D40] hover:bg-gray-100 rounded flex items-center gap-2"
                       >
-                        <LayoutDashboard className="w-4 h-4" />
-                        {user.role === 'admin' ? t('nav.admin') : t('nav.dashboard')}
+                        <Shield className="w-4 h-4" />
+                        {t('nav.admin')}
+                      </button>
+                    )}
+                    {user.role === 'worker' && (
+                      <button
+                        onClick={() => {
+                          setLocation('/workers');
+                          setIsOpen(false);
+                        }}
+                        className="w-full text-left px-2 py-2 text-[#004D40] hover:bg-gray-100 rounded flex items-center gap-2"
+                      >
+                        <Briefcase className="w-4 h-4" />
+                        Workers
                       </button>
                     )}
                     <button
