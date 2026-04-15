@@ -723,7 +723,7 @@ const ProductCard = ({ product, type }: { product: any, type: string }) => {
           <img
             src={product.image} 
             alt={displayName}
-            className="w-full h-full object-contain transition-transform duration-500 hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
           />
           <div className="absolute top-3 right-3 z-20 flex gap-2">
             {displayTags.map((tag: string) => (
