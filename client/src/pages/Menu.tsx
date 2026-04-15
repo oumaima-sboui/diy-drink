@@ -718,12 +718,12 @@ const ProductCard = ({ product, type }: { product: any, type: string }) => {
       transition={{ duration: 0.3 }}
     >
       <Card className="overflow-hidden h-full flex flex-col shadow-lg hover:shadow-xl transition-shadow border-none">
-        <div className="relative h-48 overflow-hidden">
+        <div className="aspect-[4/3] overflow-hidden">
           <div className={`absolute inset-0 bg-gradient-to-br ${displayColor} opacity-20 z-10`} />
-          <img 
+          <img
             src={product.image} 
             alt={displayName}
-            className="w-full h-full object-contain transition-transform duration-500 hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
           />
           <div className="absolute top-3 right-3 z-20 flex gap-2">
             {displayTags.map((tag: string) => (
