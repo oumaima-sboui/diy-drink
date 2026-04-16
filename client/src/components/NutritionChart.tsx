@@ -1,219 +1,160 @@
+import { useEffect, useRef } from 'react';
+import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
-import { calculateNutrition, calculateTotalCalories } from '@/lib/nutrition';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-} from 'chart.js';
-import { Ingredient } from '@/lib/types';
 
-// Enregistrer les composants Chart.js
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title
-);
+ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 interface NutritionChartProps {
-  ingredients: Ingredient[];
+  calories: number;
+  proteins: number;
+  carbs: number;
+  fats: number;
+  fiber: number;
+  vitamins: {
+    C: number;
+    A: number;
+    K: number;
+  };
 }
 
-export default function NutritionChart({ ingredients }: NutritionChartProps) {
-  const { macros, vitamins, minerals } = calculateNutrition(ingredients);
-  const totalCalories = calculateTotalCalories(ingredients);
-  // Données pour le graphique en donut des macronutriments
-  const macrosData = {
-    labels: ['Protéines', 'Glucides', 'Lipides', 'Fibres'],
+export default function NutritionChart({ calories, proteins, carbs, fats, fiber, vitamins }: NutritionChartProps) {
+  const doughnutRef = useRef<any>(null);
+  const barRef = useRef<any>(null);
+
+  // Force re-render des charts
+  useEffect(() => {
+    if (doughnutRef.current) {
+      doughnutRef.current.update();
+    }
+    if (barRef.current) {
+      barRef.current.update();
+    }
+  }, [calories, proteins, carbs, fats, fiber, vitamins]);
+
+  const macroData = {
+    labels: ['Protéines', 'Glucides', 'Lipides'],
     datasets: [
       {
-        label: 'Macronutriments (g)',
-        data: [macros.protein, macros.carbs, macros.fat, macros.fiber],
+        data: [proteins, carbs, fats],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.8)',  // Rouge pour protéines
-          'rgba(54, 162, 235, 0.8)',  // Bleu pour glucides
-          'rgba(255, 206, 86, 0.8)',  // Jaune pour lipides
-          'rgba(75, 192, 192, 0.8)',  // Vert pour fibres
+          'rgba(255, 99, 132, 0.8)',
+          'rgba(54, 162, 235, 0.8)',
+          'rgba(255, 206, 86, 0.8)',
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
           'rgba(54, 162, 235, 1)',
           'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
         ],
         borderWidth: 2,
       },
     ],
   };
 
-  const macrosOptions = {
+  const vitaminData = {
+    labels: ['Vitamine C', 'Vitamine A', 'Vitamine K', 'Fibres'],
+    datasets: [
+      {
+        label: '% Apports Journaliers',
+        data: [vitamins.C, vitamins.A, vitamins.K, fiber],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const chartOptions = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         position: 'bottom' as const,
         labels: {
           font: {
-            size: 11,
+            size: 12,
           },
           padding: 10,
         },
       },
       tooltip: {
-        callbacks: {
-          label: function(context: any) {
-            return `${context.label}: ${context.parsed}g`;
-          }
-        }
-      }
+        enabled: true,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 12,
+        titleFont: {
+          size: 14,
+        },
+        bodyFont: {
+          size: 13,
+        },
+      },
     },
   };
 
-  // Données pour le graphique en barres des vitamines
-  const vitaminsData = {
-    labels: vitamins.slice(0, 5).map(v => v.name.replace('Vitamine ', 'Vit. ')),
-    datasets: [
-      {
-        label: 'Quantité',
-        data: vitamins.slice(0, 5).map(v => v.amount),
-        backgroundColor: 'rgba(124, 179, 66, 0.8)',
-        borderColor: 'rgba(124, 179, 66, 1)',
-        borderWidth: 2,
-      },
-    ],
-  };
-
-  const vitaminsOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context: any) {
-            const vitamin = vitamins[context.dataIndex];
-            return `${vitamin.amount}`;
-          }
-        }
-      }
-    },
+  const barOptions = {
+    ...chartOptions,
     scales: {
       y: {
         beginAtZero: true,
+        max: 100,
         ticks: {
-          font: {
-            size: 10,
-          }
-        }
+          callback: function(value: any) {
+            return value + '%';
+          },
+        },
       },
-      x: {
-        ticks: {
-          font: {
-            size: 10,
-          }
-        }
-      }
-    },
-  };
-
-  // Données pour le graphique en barres des minéraux
-  const mineralsData = {
-    labels: minerals.slice(0, 4).map(m => m.name),
-    datasets: [
-      {
-        label: 'Quantité (mg)',
-        data: minerals.slice(0, 4).map(m => m.amount),
-        backgroundColor: 'rgba(255, 111, 0, 0.8)',
-        borderColor: 'rgba(255, 111, 0, 1)',
-        borderWidth: 2,
-      },
-    ],
-  };
-
-  const mineralsOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context: any) {
-            const mineral = minerals[context.dataIndex];
-            return `${mineral.amount}`;
-          }
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          font: {
-            size: 10,
-          }
-        }
-      },
-      x: {
-        ticks: {
-          font: {
-            size: 10,
-          }
-        }
-      }
     },
   };
 
   return (
-    <div className="space-y-6">
-        {/* Total des calories */}
-    <div className="bg-gradient-to-r from-[#FF6F00]/10 to-[#FF8F00]/10 border-2 border-[#FF6F00]/30 rounded-xl p-4 text-center">
-      <p className="text-xs font-semibold text-gray-600 mb-1">
-        Total des calories
-      </p>
-      <p className="text-4xl font-bold text-[#FF6F00]">
-        {totalCalories}
-        <span className="text-lg font-normal text-gray-600 ml-1">kcal</span>
-      </p>
-    </div>
-      {/* Graphique Macronutriments */}
-      <div>
-        <h4 className="text-sm font-semibold mb-3 text-center">Répartition des Macronutriments</h4>
-        <div className="h-48">
-          <Doughnut data={macrosData} options={macrosOptions} />
+    <div className="grid md:grid-cols-2 gap-6">
+      {/* Macronutriments - Doughnut */}
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-bold text-[#004D40] mb-4 text-center">
+          Macronutriments
+        </h3>
+        <div className="flex flex-col items-center">
+          <div className="w-full max-w-[250px] h-[250px] flex items-center justify-center">
+            {(proteins > 0 || carbs > 0 || fats > 0) ? (
+              <Doughnut 
+                ref={doughnutRef}
+                data={macroData} 
+                options={chartOptions}
+              />
+            ) : (
+              <p className="text-gray-400 text-sm text-center">
+                Aucune donnée de macronutriments
+              </p>
+            )}
+          </div>
+          <div className="mt-4 text-center">
+            <p className="text-2xl font-bold text-[#FF6F00]">
+              {calories} kcal
+            </p>
+            <p className="text-sm text-gray-500">Calories totales</p>
+          </div>
         </div>
       </div>
 
-      {/* Graphique Vitamines */}
-      {vitamins.length > 0 && (
-        <div>
-          <h4 className="text-sm font-semibold mb-3 text-center">Vitamines Principales</h4>
-          <div className="h-40">
-            <Bar data={vitaminsData} options={vitaminsOptions} />
-          </div>
+      {/* Vitamines & Fibres - Bar Chart */}
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-bold text-[#004D40] mb-4 text-center">
+          Vitamines & Fibres
+        </h3>
+        <div className="w-full h-[250px] flex items-center justify-center">
+          {(vitamins.C > 0 || vitamins.A > 0 || vitamins.K > 0 || fiber > 0) ? (
+            <Bar 
+              ref={barRef}
+              data={vitaminData} 
+              options={barOptions}
+            />
+          ) : (
+            <p className="text-gray-400 text-sm text-center">
+              Aucune donnée de vitamines
+            </p>
+          )}
         </div>
-      )}
-
-      {/* Graphique Minéraux */}
-      {minerals.length > 0 && (
-        <div>
-          <h4 className="text-sm font-semibold mb-3 text-center">Minéraux Principaux</h4>
-          <div className="h-40">
-            <Bar data={mineralsData} options={mineralsOptions} />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
