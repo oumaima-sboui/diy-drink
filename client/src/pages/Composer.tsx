@@ -393,65 +393,103 @@ const canAddMoreFlavors = (currentStep: number) => {
             className="w-full"
           >
             {/* Étape 4 : Récapitulatif */}
-            {currentStep === 4 ? (
-              <div className="space-y-8">
-                <div className="text-center mb-8">
-                  <span className="text-6xl mb-4 block">{STEPS[3].icon}</span>
-                  <h2 className="text-3xl font-bold text-[#004D40] mb-2">
-                    {t('composer.masterpiece')}
-                  </h2>
-                  <p className="text-gray-600">{t('composer.nameYourDrink')}</p>
-                </div>
-<Card className="p-8 shadow-2xl border-2 border-[#004D40]/10 bg-white relative overflow-hidden">
-  <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF6F00]/10 rounded-bl-full -mr-10 -mt-10" />
-  
-  <div className="mb-8 text-center">
- <label className="block text-sm font-medium text-gray-500 mb-2">
-    {t('composer.drinkName')}
-  </label>
-  <input 
-    type="text" 
-    value={drinkName}
-    onChange={(e) => setDrinkName(e.target.value)}
-    placeholder={t('composer.drinkNamePlaceholder', 'Mon Smoothie Perso')}
-    className="text-3xl font-bold text-center text-[#004D40] border-b-2 border-[#004D40]/20 focus:border-[#004D40] outline-none bg-transparent w-full max-w-md mx-auto py-2"
-  />
-  <p className="text-xs text-gray-500 mt-2">
-    {t('composer.drinkNameHelp', '✏️ Cliquez pour personnaliser le nom')}
-  </p>
+         {/* ÉTAPE 4 - SIGNATURE & NUTRITION */}
+{currentStep === 4 && (
+  <div className="space-y-6">
+    {/* Nom de la boisson */}
+    <div className="mb-8 text-center">
+      <label className="block text-sm font-medium text-gray-500 mb-2">
+        {t('composer.drinkName')}
+      </label>
+      <input 
+        type="text" 
+        value={drinkName}
+        onChange={(e) => setDrinkName(e.target.value)}
+        placeholder="Mon Smoothie Perso"
+        className="text-3xl font-bold text-center text-[#004D40] border-b-2 border-[#004D40]/20 focus:border-[#004D40] outline-none bg-transparent w-full max-w-md mx-auto py-2"
+      />
+      <p className="text-xs text-gray-500 mt-2">
+        ✏️ Cliquez pour personnaliser le nom
+      </p>
+    </div>
 
-  
-
-  </div>
-
-  <div className="grid md:grid-cols-2 gap-8">
-    <div>
-      <h3 className="font-bold text-[#004D40] mb-4">
-        {t('composer.composition')}
+    {/* Composition */}
+    <div className="bg-white rounded-xl p-6 shadow-md border-2 border-gray-100">
+      <h3 className="text-lg font-bold text-[#004D40] mb-4 flex items-center gap-2">
+        📋 {t('composer.composition')}
       </h3>
       <div className="space-y-3">
-        <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-          <span className="font-medium">{t('composer.base')}</span>
-          <span className="text-gray-600 capitalize">
-            {t(`composer.${drinkType}`)} ({selectedSize.label})
-          </span>
+        <div className="flex items-center justify-between pb-2 border-b">
+          <span className="text-sm text-gray-600">{t('composer.base')}</span>
+          <span className="font-medium text-[#004D40] capitalize">{drinkType}</span>
         </div>
-        {selectedIngredients.map((ing) => (
-          <div key={ing.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-            <span className="flex items-center gap-2">
-              <span>{ing.emoji}</span>
-              <span>{ing.nameKey ? t(ing.nameKey) : ing.name}</span>
-            </span>
-            <div className="text-right">
-              <div className="text-sm font-bold text-[#004D40]">
-                +{ing.price.toFixed(2)}€
-              </div>
-              <div className="text-xs text-gray-500">
-                {ing.calories} kcal
-              </div>
-            </div>
+        <div className="flex items-center justify-between pb-2 border-b">
+          <span className="text-sm text-gray-600">Taille</span>
+          <span className="font-medium text-[#004D40]">{selectedSize.label}</span>
+        </div>
+        <div>
+          <p className="text-sm text-gray-600 mb-2">Ingrédients ({selectedIngredients.length})</p>
+          <div className="flex flex-wrap gap-2">
+            {selectedIngredients.map((ing) => (
+              <span 
+                key={ing.id}
+                className="px-3 py-1 bg-[#004D40]/10 text-[#004D40] rounded-full text-sm font-medium"
+              >
+                {ing.emoji} {ing.name}
+              </span>
+            ))}
           </div>
-        ))}
+        </div>
+      </div>
+    </div>
+
+    {/* NUTRITION CHART - CORRECTION ICI */}
+    <div className="bg-white rounded-xl p-6 shadow-md border-2 border-gray-100">
+      <h3 className="text-lg font-bold text-[#004D40] mb-4 flex items-center gap-2">
+        📊 {t('composer.nutrition')}
+      </h3>
+      {selectedIngredients.length > 0 ? (
+        <NutritionChart 
+          key={`nutrition-${selectedIngredients.map(i => i.id).join('-')}`}
+          ingredients={selectedIngredients}  {/* ← PASSER LES INGREDIENTS, PAS nutritionData */}
+        />
+      ) : (
+        <p className="text-gray-400 text-center py-8">
+          Sélectionnez des ingrédients pour voir l'analyse nutritionnelle
+        </p>
+      )}
+    </div>
+
+    {/* Prix total */}
+    <div className="bg-gradient-to-r from-[#FF6F00] to-[#FF8F00] text-white rounded-xl p-6 text-center shadow-lg">
+      <p className="text-sm font-semibold mb-2">
+        {t('composer.estimatedTotal')}
+      </p>
+      <p className="text-4xl font-bold">
+        {calculateTotal().toFixed(2)}€
+      </p>
+    </div>
+
+    {/* Boutons */}
+    <div className="flex gap-4">
+      <Button
+        onClick={() => setCurrentStep(3)}
+        variant="outline"
+        className="flex-1 border-2 border-[#004D40] text-[#004D40] hover:bg-[#004D40] hover:text-white"
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" />
+        {t('composer.back')}
+      </Button>
+      <Button
+        onClick={handleAddToCart}
+        className="flex-1 bg-[#FF6F00] hover:bg-[#FF8F00] text-white"
+      >
+        <ShoppingCart className="w-4 h-4 mr-2" />
+        {t('composer.order')}
+      </Button>
+    </div>
+  </div>
+)}
       </div>
     </div>
 
@@ -459,15 +497,9 @@ const canAddMoreFlavors = (currentStep: number) => {
       <h3 className="font-bold text-[#004D40] mb-4">
         {t('composer.nutrition')}
       </h3>
-     <NutritionChart
-      key={`nutrition-${selectedIngredients.map(i => i.id).join('-')}`}  
-      calories={nutritionData.calories}
-      proteins={nutritionData.proteins}
-      carbs={nutritionData.carbs}
-      fats={nutritionData.fats}
-      fiber={nutritionData.fiber}
-      vitamins={nutritionData.vitamins}
-    />
+    <NutritionChart
+  ingredients={selectedIngredients}  
+/>
     </div>
   </div>
 </Card>
