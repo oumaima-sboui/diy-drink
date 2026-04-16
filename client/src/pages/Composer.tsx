@@ -459,7 +459,15 @@ const canAddMoreFlavors = (currentStep: number) => {
       <h3 className="font-bold text-[#004D40] mb-4">
         {t('composer.nutrition')}
       </h3>
-      <NutritionChart ingredients={selectedIngredients} />
+     <NutritionChart
+      key={`nutrition-${selectedIngredients.map(i => i.id).join('-')}`}  
+      calories={nutritionData.calories}
+      proteins={nutritionData.proteins}
+      carbs={nutritionData.carbs}
+      fats={nutritionData.fats}
+      fiber={nutritionData.fiber}
+      vitamins={nutritionData.vitamins}
+    />
     </div>
   </div>
 </Card>
