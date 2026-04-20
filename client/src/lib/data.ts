@@ -233,130 +233,254 @@ export const ingredients: Ingredient[] = [
   forJuice: false,
   forSmoothie: true
 },
-  // Fruits
-  { 
-    id: 'pomme', 
-    name: 'Pomme',
-    nameKey: 'ingredient.pomme',
-    emoji: '🍎', 
-    category: 'fruits', 
-    price: 0.55, 
-    calories: 52, 
-    allergens: [],
-    baristaAdvice: 'La pomme adoucit et équilibre les saveurs' 
-  },
-
-  { 
-    id: 'orange', 
-    name: 'Orange',
-    nameKey: 'ingredient.orange',
-    emoji: '🍊', 
-    category: 'fruits', 
-    price: 0.65, 
-    calories: 47, 
-    allergens: [],
-    baristaAdvice: 'Parfaite pour une touche acidulée' 
-  },
-  { 
-    id: 'banane', 
-    name: 'Banane',
-    nameKey: 'ingredient.banane',
-    emoji: '🍌', 
-    category: 'fruits', 
-    price: 0.45, 
-    calories: 89, 
-    allergens: [],
-    baristaAdvice: 'Donne une texture crémeuse aux smoothies' 
-  },
-  { 
-    id: 'fraise', 
-    name: 'Fraise',
-    nameKey: 'ingredient.fraise',
-    emoji: '🍓', 
-    category: 'fruits', 
-    price: 0.85, 
-    calories: 32, 
-    allergens: [],
-    baristaAdvice: 'Fraîcheur et douceur garanties' 
-  },
-  { 
+ // Fruits
+{ 
+  id: 'pomme', 
+  name: 'Pomme',
+  nameKey: 'ingredient.pomme',
+  emoji: '🍎', 
+  category: 'fruits', 
+  price: 0.55, 
+  calories: 52,
+  protein: 0.3,
+  carbs: 14,
+  fat: 0.2,
+  fiber: 2.4,
+  allergens: [],
+  baristaAdvice: 'La pomme adoucit et équilibre les saveurs',
+  vitamins: [
+    { name: 'Vitamine C', amount: 4.6, unit: 'mg' },
+    { name: 'Vitamine K', amount: 2.2, unit: 'µg' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 107, unit: 'mg' }
+  ]
+},
+{ 
+  id: 'orange', 
+  name: 'Orange',
+  nameKey: 'ingredient.orange',
+  emoji: '🍊', 
+  category: 'fruits', 
+  price: 0.65, 
+  calories: 47,
+  protein: 0.9,
+  carbs: 11.8,
+  fat: 0.1,
+  fiber: 2.4,
+  allergens: [],
+  baristaAdvice: 'Parfaite pour une touche acidulée',
+  vitamins: [
+    { name: 'Vitamine C', amount: 53.2, unit: 'mg' },
+    { name: 'Vitamine A', amount: 225, unit: 'IU' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 181, unit: 'mg' },
+    { name: 'Calcium', amount: 40, unit: 'mg' }
+  ]
+},
+{ 
+  id: 'banane', 
+  name: 'Banane',
+  nameKey: 'ingredient.banane',
+  emoji: '🍌', 
+  category: 'fruits', 
+  price: 0.45, 
+  calories: 89,
+  protein: 1.1,
+  carbs: 23,
+  fat: 0.3,
+  fiber: 2.6,
+  allergens: [],
+  baristaAdvice: 'Donne une texture crémeuse aux smoothies',
+  vitamins: [
+    { name: 'Vitamine C', amount: 8.7, unit: 'mg' },
+    { name: 'Vitamine B6', amount: 0.4, unit: 'mg' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 358, unit: 'mg' },
+    { name: 'Magnésium', amount: 27, unit: 'mg' }
+  ]
+},
+{ 
+  id: 'fraise', 
+  name: 'Fraise',
+  nameKey: 'ingredient.fraise',
+  emoji: '🍓', 
+  category: 'fruits', 
+  price: 0.85, 
+  calories: 32,
+  protein: 0.7,
+  carbs: 7.7,
+  fat: 0.3,
+  fiber: 2.0,
+  allergens: [],
+  baristaAdvice: 'Fraîcheur et douceur garanties',
+  vitamins: [
+    { name: 'Vitamine C', amount: 58.8, unit: 'mg' },
+    { name: 'Vitamine K', amount: 2.2, unit: 'µg' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 153, unit: 'mg' },
+    { name: 'Manganèse', amount: 0.4, unit: 'mg' }
+  ]
+},
+{ 
   id: 'myrtille', 
   name: 'Myrtille', 
   nameKey: 'ingredient.myrtille',
-  emoji: '🍇', 
+  emoji: '🫐', 
   category: 'fruits', 
   price: 0.80, 
   calories: 57,
-  allergens: []
+  protein: 0.7,
+  carbs: 14.5,
+  fat: 0.3,
+  fiber: 2.4,
+  allergens: [],
+  vitamins: [
+    { name: 'Vitamine C', amount: 9.7, unit: 'mg' },
+    { name: 'Vitamine K', amount: 19.3, unit: 'µg' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 77, unit: 'mg' },
+    { name: 'Manganèse', amount: 0.3, unit: 'mg' }
+  ]
 },
-  { 
-    id: 'ananas', 
-    name: 'Ananas',
-    nameKey: 'ingredient.ananas',
-    emoji: '🍍', 
-    category: 'fruits', 
-    price: 0.75, 
-    calories: 50, 
-    allergens: [],
-    baristaAdvice: 'Apporte une touche tropicale' 
-  },
-  { 
-    id: 'mangue', 
-    name: 'Mangue',
-    nameKey: 'ingredient.mangue',
-    emoji: '🥭', 
-    category: 'fruits', 
-    price: 0.95, 
-    calories: 60, 
-    allergens: [],
-    baristaAdvice: 'Onctuosité et saveur exotique' 
-  },
-  { 
-    id: 'kiwi', 
-    name: 'Kiwi',
-    nameKey: 'ingredient.kiwi',
-    emoji: '🥝', 
-    category: 'fruits', 
-    price: 0.65, 
-    calories: 61, 
-    allergens: [],
-    baristaAdvice: 'Vitamine C et fraîcheur' 
-  },
-  { 
-    id: 'peche', 
-    name: 'Pêche',
-    nameKey: 'ingredient.peche',
-    emoji: '🍑', 
-    category: 'fruits', 
-    price: 0.80, 
-    calories: 39, 
-    allergens: [],
-    baristaAdvice: 'Douceur et parfum délicat' 
-  },
-  { 
-    id: 'pasteque', 
-    name: 'Pastèque',
-    nameKey: 'ingredient.pasteque',
-    emoji: '🍉', 
-    category: 'fruits', 
-    price: 0.35, 
-    calories: 30, 
-    allergens: [],
-    baristaAdvice: 'Ultra hydratante et légère' 
-  },
-  { 
-    id: 'passion', 
-    name: 'Fruit de la passion',
-    nameKey: 'ingredient.passion',
-    emoji: '🟣', 
-    category: 'fruits', 
-    price: 1.40, 
-    calories: 97, 
-    allergens: [],
-    baristaAdvice: 'Saveur intense et exotique' 
-  },
-
- 
+{ 
+  id: 'ananas', 
+  name: 'Ananas',
+  nameKey: 'ingredient.ananas',
+  emoji: '🍍', 
+  category: 'fruits', 
+  price: 0.75, 
+  calories: 50,
+  protein: 0.5,
+  carbs: 13.1,
+  fat: 0.1,
+  fiber: 1.4,
+  allergens: [],
+  baristaAdvice: 'Apporte une touche tropicale',
+  vitamins: [
+    { name: 'Vitamine C', amount: 47.8, unit: 'mg' },
+    { name: 'Vitamine B6', amount: 0.1, unit: 'mg' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 109, unit: 'mg' },
+    { name: 'Manganèse', amount: 0.9, unit: 'mg' }
+  ]
+},
+{ 
+  id: 'mangue', 
+  name: 'Mangue',
+  nameKey: 'ingredient.mangue',
+  emoji: '🥭', 
+  category: 'fruits', 
+  price: 0.95, 
+  calories: 60,
+  protein: 0.8,
+  carbs: 15,
+  fat: 0.4,
+  fiber: 1.6,
+  allergens: [],
+  baristaAdvice: 'Onctuosité et saveur exotique',
+  vitamins: [
+    { name: 'Vitamine C', amount: 36.4, unit: 'mg' },
+    { name: 'Vitamine A', amount: 1082, unit: 'IU' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 168, unit: 'mg' }
+  ]
+},
+{ 
+  id: 'kiwi', 
+  name: 'Kiwi',
+  nameKey: 'ingredient.kiwi',
+  emoji: '🥝', 
+  category: 'fruits', 
+  price: 0.65, 
+  calories: 61,
+  protein: 1.1,
+  carbs: 14.7,
+  fat: 0.5,
+  fiber: 3.0,
+  allergens: [],
+  baristaAdvice: 'Vitamine C et fraîcheur',
+  vitamins: [
+    { name: 'Vitamine C', amount: 92.7, unit: 'mg' },
+    { name: 'Vitamine K', amount: 40.3, unit: 'µg' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 312, unit: 'mg' }
+  ]
+},
+{ 
+  id: 'peche', 
+  name: 'Pêche',
+  nameKey: 'ingredient.peche',
+  emoji: '🍑', 
+  category: 'fruits', 
+  price: 0.80, 
+  calories: 39,
+  protein: 0.9,
+  carbs: 9.5,
+  fat: 0.3,
+  fiber: 1.5,
+  allergens: [],
+  baristaAdvice: 'Douceur et parfum délicat',
+  vitamins: [
+    { name: 'Vitamine C', amount: 6.6, unit: 'mg' },
+    { name: 'Vitamine A', amount: 326, unit: 'IU' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 190, unit: 'mg' }
+  ]
+},
+{ 
+  id: 'pasteque', 
+  name: 'Pastèque',
+  nameKey: 'ingredient.pasteque',
+  emoji: '🍉', 
+  category: 'fruits', 
+  price: 0.35, 
+  calories: 30,
+  protein: 0.6,
+  carbs: 7.6,
+  fat: 0.2,
+  fiber: 0.4,
+  allergens: [],
+  baristaAdvice: 'Ultra hydratante et légère',
+  vitamins: [
+    { name: 'Vitamine C', amount: 8.1, unit: 'mg' },
+    { name: 'Vitamine A', amount: 569, unit: 'IU' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 112, unit: 'mg' }
+  ]
+},
+{ 
+  id: 'passion', 
+  name: 'Fruit de la passion',
+  nameKey: 'ingredient.passion',
+  emoji: '🟣', 
+  category: 'fruits', 
+  price: 1.40, 
+  calories: 97,
+  protein: 2.2,
+  carbs: 23.4,
+  fat: 0.7,
+  fiber: 10.4,
+  allergens: [],
+  baristaAdvice: 'Saveur intense et exotique',
+  vitamins: [
+    { name: 'Vitamine C', amount: 30, unit: 'mg' },
+    { name: 'Vitamine A', amount: 1274, unit: 'IU' }
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 348, unit: 'mg' },
+    { name: 'Fer', amount: 1.6, unit: 'mg' }
+  ]
+},
  
  
 

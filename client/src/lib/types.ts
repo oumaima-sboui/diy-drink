@@ -25,6 +25,20 @@ export interface Ingredient {
   category: IngredientCategory;
   price: number;
   calories: number;
+   protein?: number;     
+  carbs?: number;       
+  fat?: number;          
+  fiber?: number; 
+  vitamins?: Array<{    
+    name: string;
+    amount: number;
+    unit: string;
+  }>;
+  minerals?: Array<{   
+    name: string;
+    amount: number;
+    unit: string;
+  }>;
   allergens: AllergenId[];
   baristaAdvice?: string;
   forJuice?: boolean;    
