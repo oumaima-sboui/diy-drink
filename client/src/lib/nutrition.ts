@@ -113,6 +113,90 @@ export const nutritionData: Record<string, {
     ],
     benefits: ['Mémoire & cognition', 'Antioxydants', 'Vision'],
   },
+  'peche': {
+  calories: 39,
+  protein: 0.9,
+  carbs: 10,
+  fat: 0.3,
+  fiber: 1.5,
+  vitamins: [
+    { name: 'Vitamine C', amount: 6.6, unit: 'mg' },
+    { name: 'Vitamine A', amount: 16, unit: 'µg' },
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 190, unit: 'mg' },
+    { name: 'Magnésium', amount: 9, unit: 'mg' },
+  ],
+  benefits: ['Hydratation', 'Peau', 'Digestion'],
+},
+
+'pasteque': {
+  calories: 30,
+  protein: 0.6,
+  carbs: 8,
+  fat: 0.2,
+  fiber: 0.4,
+  vitamins: [
+    { name: 'Vitamine C', amount: 8.1, unit: 'mg' },
+    { name: 'Vitamine A', amount: 28, unit: 'µg' },
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 112, unit: 'mg' },
+    { name: 'Magnésium', amount: 10, unit: 'mg' },
+  ],
+  benefits: ['Hydratation', 'Antioxydant', 'Fraîcheur'],
+},
+
+'mangue': {
+  calories: 60,
+  protein: 0.8,
+  carbs: 15,
+  fat: 0.4,
+  fiber: 1.6,
+  vitamins: [
+    { name: 'Vitamine C', amount: 36.4, unit: 'mg' },
+    { name: 'Vitamine A', amount: 54, unit: 'µg' },
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 168, unit: 'mg' },
+    { name: 'Magnésium', amount: 10, unit: 'mg' },
+  ],
+  benefits: ['Immunité', 'Peau', 'Énergie'],
+},
+
+'ananas': {
+  calories: 50,
+  protein: 0.5,
+  carbs: 13,
+  fat: 0.1,
+  fiber: 1.4,
+  vitamins: [
+    { name: 'Vitamine C', amount: 47.8, unit: 'mg' },
+    { name: 'Vitamine B6', amount: 0.1, unit: 'mg' },
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 109, unit: 'mg' },
+    { name: 'Manganèse', amount: 0.9, unit: 'mg' },
+  ],
+  benefits: ['Digestion', 'Anti-inflammatoire', 'Immunité'],
+},
+
+'kiwi': {
+  calories: 61,
+  protein: 1.1,
+  carbs: 15,
+  fat: 0.5,
+  fiber: 3,
+  vitamins: [
+    { name: 'Vitamine C', amount: 92.7, unit: 'mg' },
+    { name: 'Vitamine K', amount: 40, unit: 'µg' },
+  ],
+  minerals: [
+    { name: 'Potassium', amount: 312, unit: 'mg' },
+    { name: 'Magnésium', amount: 17, unit: 'mg' },
+  ],
+  benefits: ['Immunité', 'Digestion', 'Antioxydant'],
+},
   'orange': {
     calories: 47,
     protein: 0.9,

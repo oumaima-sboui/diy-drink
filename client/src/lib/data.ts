@@ -329,7 +329,7 @@ export const ingredients: Ingredient[] = [
   id: 'myrtille', 
   name: 'Myrtille', 
   nameKey: 'ingredient.myrtille',
-  emoji: '🫐', 
+  emoji: '🍇', 
   category: 'fruits', 
   price: 0.80, 
   calories: 57,
@@ -458,29 +458,7 @@ export const ingredients: Ingredient[] = [
     { name: 'Potassium', amount: 112, unit: 'mg' }
   ]
 },
-{ 
-  id: 'passion', 
-  name: 'Fruit de la passion',
-  nameKey: 'ingredient.passion',
-  emoji: '🟣', 
-  category: 'fruits', 
-  price: 1.40, 
-  calories: 97,
-  protein: 2.2,
-  carbs: 23.4,
-  fat: 0.7,
-  fiber: 10.4,
-  allergens: [],
-  baristaAdvice: 'Saveur intense et exotique',
-  vitamins: [
-    { name: 'Vitamine C', amount: 30, unit: 'mg' },
-    { name: 'Vitamine A', amount: 1274, unit: 'IU' }
-  ],
-  minerals: [
-    { name: 'Potassium', amount: 348, unit: 'mg' },
-    { name: 'Fer', amount: 1.6, unit: 'mg' }
-  ]
-},
+
  
  
 
